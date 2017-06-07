@@ -148,7 +148,7 @@ Monomial Htto::Monomial::operator/(const Monomial & M) const
 	return ret;
 }
 
-bool Htto::Monomial::operator>(const Monomial & M) const
+bool Htto::Monomial::operator<(const Monomial & M) const
 {
 	if (times() > M.times())
 	{
@@ -164,9 +164,21 @@ bool Htto::Monomial::operator>(const Monomial & M) const
 	}
 }
 
+bool Htto::Monomial::operator>(const Monomial & M) const
+{
+	if (!(*this < M))
+		return true;
+	else
+		return false;
+}
+
 std::string Htto::Monomial::ToString()const
 {
 	std::string ret;
+	if (variableTable.size() == 0)
+	{
+		return coef.ToString();
+	}
 	if (coef == Fraction(0))
 	{
 		return "0";

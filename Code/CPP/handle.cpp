@@ -199,18 +199,21 @@ std::string Htto::StringTools::get_number_by_index(std::string str, unsigned ind
 
 float Htto::StringTools::string_to_float(std::string str)
 {
-	bool isN = str[0] == '-';
+	bool isN = ((str[0] == '-')||(str[0]=='+'));
 	int frontPart = 0;
 	int tv = 1;
 	int index = 0;
 	if (isN)
+	{ 
 		index++;
+	}
+
 	for (const auto & a : str)
 	{
-		if (std::isdigit(a) || a == '.' || a == '-')
+		if (std::isdigit(a) || a == '.' || a == '-'||a=='+')
 			continue;
 		else
-			throw std::runtime_error("error input" + str + " string_to_float is abad input");
+			throw std::runtime_error("error input" + str + " string_to_float is a bad input");
 	}
 	while (index != str.size() && str[index] != '.')
 	{
@@ -218,7 +221,7 @@ float Htto::StringTools::string_to_float(std::string str)
 		index++;
 	}
 	if (index == str.size())
-		if (isN)
+		if (isN&&str[0]=='-')
 			return -frontPart;
 		return frontPart;
 	index++;

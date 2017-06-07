@@ -29,7 +29,8 @@ namespace Htto
 		bool operator!=(const Monomial & M)const;
 		Monomial operator* (const Monomial &M)const;
 		Monomial operator/ (const Monomial & M)const;
-		bool operator > (const Monomial & M)const;
+		bool operator < (const Monomial & M)const;
+		bool operator >(const Monomial & M)const;
 		std::string ToString()const;
 		std::string name()const;
 		static bool is_like_term(const Monomial &,const Monomial &);//判断是否是同类项
