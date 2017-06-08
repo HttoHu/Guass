@@ -1,4 +1,4 @@
-#include "..\HPP\handle.h"
+#include "../handle.h"
 #include <iostream>
 #include <cctype>
 //获得最大公因数
@@ -222,10 +222,10 @@ float Htto::StringTools::string_to_float(std::string str)
 	}
 	if (index == str.size())
 		if (isN&&str[0]=='-')
-			return -frontPart;
-		return frontPart;
+			return -(float)frontPart;
+		return (float)frontPart;
 	index++;
-	float ret = frontPart;
+	float ret = (float)frontPart;
 	tv = 1;
 	while (index != str.size())
 	{

@@ -1,4 +1,4 @@
-﻿#include"..\HPP\monomial.h"
+﻿#include"../monomial.h"
 using std::string;
 using namespace Htto;
 string UseAndClearString(std::string & str)
@@ -14,6 +14,7 @@ bool isNumebr(const std::string & str)
 		if (!isdigit(a) || a == '.')
 			return false;
 	}
+	return true;
 }
 
 Htto::Monomial::Monomial(std::string str)

@@ -1,4 +1,4 @@
-#include "..\HPP\polynomial.h"
+#include "../polynomial.h"
 using namespace Htto;
 Htto::Polynomial::Polynomial(std::string str)
 {

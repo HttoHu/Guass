@@ -1,4 +1,4 @@
-#include "..\HPP\fraction.h"
+#include "../fraction.h"
 #include <string>
 #include <iostream>
 #include <algorithm>

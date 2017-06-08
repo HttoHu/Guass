@@ -1,4 +1,4 @@
-#include "..\HPP\rational_fraction.h"
+#include "../rational_fraction.h"
 
 Htto::Rational_fraction::Rational_fraction(const std::string & str)
 {

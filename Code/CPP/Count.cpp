@@ -1,5 +1,5 @@
-#include "..\HPP\Count.h"
-#include "..\HPP\BalanceStack.h"
+#include "../Count.h"
+#include "../BalanceStack.h"
 #include <stdlib.h>
 using namespace Htto::Count;
 void string_replace(std::string&s1, const std::string&s2, const std::string&s3)

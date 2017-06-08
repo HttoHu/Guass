@@ -1,9 +1,9 @@
-﻿#include "..\HPP\fraction.h"
-#include "..\HPP\Count.h"
-#include "..\HPP\rational_fraction.h"
-#include "..\HPP\monomial.h"
-#include "..\HPP\handle.h"
-#include "..\HPP\polynomial.h"
+﻿#include "../fraction.h"
+#include "../Count.h"
+#include "../rational_fraction.h"
+#include "../monomial.h"
+#include "../handle.h"
+#include "../polynomial.h"
 //@ ⁰
 //b*[^:b#/]+.*$
 int main()
