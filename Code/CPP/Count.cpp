@@ -1,5 +1,5 @@
-#include "Count.h"
-#include "BalanceStack.h"
+#include "..\HPP\Count.h"
+#include "..\HPP\BalanceStack.h"
 #include <stdlib.h>
 using namespace Htto::Count;
 void string_replace(std::string&s1, const std::string&s2, const std::string&s3)
@@ -70,7 +70,7 @@ unit Push_unit(int & index, std::string input)
 std::list <unit> Simple_Count::PushToList(std::string input)
 {
 	std::list<unit> ret;
-	string_replace(input, "¡Ì", std::string() + '@');
+	string_replace(input, "@", std::string() + '@');
 	int index = 0;
 	while (index < input.size())
 	{

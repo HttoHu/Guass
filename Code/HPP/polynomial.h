@@ -21,7 +21,7 @@ namespace Htto
 		std::size_t variable_count();
 		Fraction max_times();
 		void sort();
-
+		bool operator==(const Polynomial )const;
 		Polynomial & operator =(const Polynomial &) = default;
 		Polynomial operator +(const Polynomial &)const;
 		Polynomial operator -(const Polynomial &)const;

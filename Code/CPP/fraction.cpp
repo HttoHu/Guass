@@ -1,4 +1,4 @@
-#include "fraction.h"
+#include "..\HPP\fraction.h"
 #include <string>
 #include <iostream>
 #include <algorithm>
@@ -61,7 +61,7 @@ std::string Htto::Radical_Exp::ToString()const
 	}
 	else
 	{
-		if (ret.substr(0, 1) != "¡Ì")
+		if (ret.substr(0, 1) != "@")
 			return ret.substr(1);
 		else
 			return ret.substr(2);
@@ -269,13 +269,13 @@ Htto::Radical_Number::Radical_Number(std::string str)
 		str = str.substr(1);
 		isNa = true;
 	}
-	if (str.find("¡Ì") == std::string::npos)
+	if (str.find("@") == std::string::npos)
 	{
 		outNumber = StrToNum(str);
 		inNumber = 1;
 		return;
 	}
-	unsigned int index = str.find("¡Ì");
+	unsigned int index = str.find("@");
 	if (index == 0)
 	{
 		outNumber = 1;
@@ -322,7 +322,7 @@ std::string Htto::Radical_Number::ToString()const
 {
 	std::string front = NumToStr(outNumber);
 	std::string inner = NumToStr(inNumber);
-	std::string bond = "¡Ì";
+	std::string bond = "@";
 	if (inNumber == 1)
 	{
 		return front;
@@ -383,7 +383,7 @@ Radical_Number Htto::Radical_Number::StrSimpleCount(std::string str)
 Radical_Number Htto::Radical_Number::set(std::string setStr)
 {
 	std::string & str = setStr;
-	if (setStr.find("¡Ì") == std::string::npos)
+	if (setStr.find("@") == std::string::npos)
 	{
 		outNumber = StrToNum(setStr);
 		inNumber = 1;
@@ -401,13 +401,13 @@ Radical_Number Htto::Radical_Number::set(std::string setStr)
 		//std::cout << "\n   " << str << "fas\n";
 		isNa = true;
 	}
-	if (str.find("¡Ì") == std::string::npos)
+	if (str.find("@") == std::string::npos)
 	{
 		outNumber = StrToNum(str);
 		inNumber = 1;
 		return *this;
 	}
-	unsigned int index = str.find("¡Ì");
+	unsigned int index = str.find("@");
 	if (index == 0)
 	{
 		outNumber = 1;
@@ -726,10 +726,21 @@ Fraction Htto::Fraction::GetReciprocal()const
 }
 string Htto::Fraction::ToString()const
 {
+	Fraction ret = *this;
+	if (m_denomilator < Fraction(0))
+	{
+		ret.m_denomilator = -ret.m_denomilator;
+		ret.m_molecular = -ret.m_molecular;
+		return ret.ToString();
+	}
 	if (m_denomilator.ToString() == "1")
 	{
 		return m_molecular.ToString();
 	}
+	else if (m_molecular.ToString() == "0")
+		return "0";
+	else if (m_denomilator.ToString() == "0")
+		throw std::runtime_error("Fraction: m_denomilator is zero");
 	else if (m_denomilator.ToString() == "-1")
 	{
 		return "-" + m_molecular.ToString();

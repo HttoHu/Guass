@@ -1,4 +1,4 @@
-#include "handle.h"
+#include "..\HPP\handle.h"
 #include <iostream>
 #include <cctype>
 //获得最大公因数

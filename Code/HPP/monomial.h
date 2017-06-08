@@ -29,6 +29,7 @@ namespace Htto
 		bool operator!=(const Monomial & M)const;
 		Monomial operator* (const Monomial &M)const;
 		Monomial operator/ (const Monomial & M)const;
+		bool operator==(const Monomial & M)const;
 		bool operator < (const Monomial & M)const;
 		bool operator >(const Monomial & M)const;
 		std::string ToString()const;

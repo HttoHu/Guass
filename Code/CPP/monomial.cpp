@@ -1,4 +1,4 @@
-﻿#include"monomial.h"
+﻿#include"..\HPP\monomial.h"
 using std::string;
 using namespace Htto;
 string UseAndClearString(std::string & str)
@@ -146,6 +146,11 @@ Monomial Htto::Monomial::operator/(const Monomial & M) const
 		}
 	}
 	return ret;
+}
+
+bool Htto::Monomial::operator==(const Monomial & M) const
+{
+	return variableTable == M.variableTable;
 }
 
 bool Htto::Monomial::operator<(const Monomial & M) const

@@ -1,4 +1,4 @@
-#include "BalanceStack.h"
+#include "..\HPP\BalanceStack.h"
 int getCharValue(char ch)
 {
 	if (ch == '(')

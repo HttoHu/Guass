@@ -13,8 +13,8 @@ namespace Htto
 	private:
 		friend class Radical_Exp;
 		friend Radical_Number operator-(Radical_Number op);
-		int inNumber=1;
-		int outNumber=1;
+		long inNumber=1;
+		long outNumber=1;
 	public:
 		Radical_Number(int front, int in) :outNumber(front), inNumber(in) {}
 		Radical_Number(std::string str);

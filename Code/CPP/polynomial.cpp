@@ -1,4 +1,4 @@
-#include "polynomial.h"
+#include "..\HPP\polynomial.h"
 using namespace Htto;
 Htto::Polynomial::Polynomial(std::string str)
 {
@@ -121,6 +121,14 @@ void Htto::Polynomial::sort()
 
 		data[j] = tmp;
 	}
+}
+
+bool Htto::Polynomial::operator==(Polynomial  poly) const
+{
+	Polynomial m = *this;
+	m.simplification();
+	poly.simplification();
+	return m.ToString() == poly.ToString();
 }
 
 void Htto::Polynomial::push_monomial(const std::string & str)
