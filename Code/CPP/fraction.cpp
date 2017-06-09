@@ -627,7 +627,7 @@ Htto::Fraction::Fraction(std::string str)
 			{
 				m_molecular = Radical_Exp(std::to_string(test));
 				m_denomilator = Radical_Exp(std::to_string(tenV));
-				Simplification();
+				simplification();
 				return;
 			}
 			else
@@ -647,7 +647,7 @@ Htto::Fraction::Fraction(std::string str)
 		tp.numsqrt();
 		m_denomilator = tp.m_denomilator;
 		m_molecular = tp.m_molecular;
-		Simplification();
+		simplification();
 		return;
 	}
 	else if (str.find('/') == std::string::npos&&tpstr.find('@') != std::string::npos)
@@ -684,7 +684,7 @@ Htto::Fraction::Fraction(float fla)
 		{
 			m_molecular = Radical_Exp(std::to_string(test));
 			m_denomilator = Radical_Exp(std::to_string(tenV));
-			Simplification();
+			simplification();
 			return;
 		}
 		else
@@ -722,7 +722,7 @@ Fraction Htto::Fraction::operator=(string str)
 		tp.numsqrt();
 		m_denomilator = tp.m_denomilator;
 		m_molecular = tp.m_molecular;
-		Simplification();
+		simplification();
 		return *this;
 	}
 
@@ -762,7 +762,7 @@ Fraction Htto::Fraction::get_sqrt_value()
 }
 void Htto::Fraction::numsqrt()
 {
-	Simplification();
+	simplification();
 	if (m_molecular.ExpVec.size() > 2 || m_denomilator.ExpVec.size() > 2)
 	{
 		return;
@@ -787,11 +787,11 @@ void Htto::Fraction::numsqrt()
 		t.ExpVec.push_back(lh);
 		m_molecular = m_molecular*t;
 		m_denomilator = m_denomilator*t;
-		Simplification();
+		simplification();
 		numsqrt();
 	}
 }
-void Htto::Fraction::Simplification()
+void Htto::Fraction::simplification()
 {
 	//std::cout << Under.isNature();
 	if (m_molecular.ExpVec.size() > 1 && (int)m_molecular.ExpVec.back() == 0)
@@ -814,13 +814,13 @@ void Htto::Fraction::Simplification()
 	m_molecular.reduceByNumber(maxGCD);
 	m_denomilator.reduceByNumber(maxGCD);
 }
-void Htto::Fraction::Reciprocal()
+void Htto::Fraction::reciprocal()
 {
 	if (m_denomilator == 0)
 		throw std::runtime_error("zero cann't be m_denomilator");
 	std::swap(m_denomilator, m_molecular);
 }
-Fraction Htto::Fraction::GetReciprocal()const
+Fraction Htto::Fraction::getReciprocal()const
 {
 	Fraction ret = *this;
 	if (m_denomilator == 0)
@@ -863,7 +863,7 @@ Fraction Htto::Fraction::operator+(const Fraction & op)const
 	Fraction f;
 	f.m_molecular = (m_molecular*op.m_denomilator) + (op.m_molecular*m_denomilator);
 	f.m_denomilator = under;
-	f.Simplification();
+	f.simplification();
 	return f;
 }
 Fraction& Htto::Fraction::operator+=(const Fraction & op)
@@ -871,7 +871,7 @@ Fraction& Htto::Fraction::operator+=(const Fraction & op)
 	Radical_Exp under = m_denomilator*op.m_denomilator;
 	m_molecular = (m_molecular*op.m_denomilator) + (op.m_molecular*m_denomilator);
 	m_denomilator = under;
-	Simplification();
+	simplification();
 	return *this;
 }
 Fraction & Htto::Fraction::operator-=(const Fraction & op)
@@ -879,7 +879,7 @@ Fraction & Htto::Fraction::operator-=(const Fraction & op)
 	Radical_Exp under = m_denomilator*op.m_denomilator;
 	m_molecular = (m_molecular*op.m_denomilator) - (op.m_molecular*m_denomilator);
 	m_denomilator = under;
-	Simplification();
+	simplification();
 	return *this;
 }
 Fraction Htto::Fraction::operator-(const Fraction & op)const
@@ -890,7 +890,7 @@ Fraction Htto::Fraction::operator-(const Fraction & op)const
 		return 0;
 	f.m_molecular = (m_molecular*op.m_denomilator) - (op.m_molecular*m_denomilator);
 	f.m_denomilator = under;
-	f.Simplification();
+	f.simplification();
 	return f;
 }
 Fraction Htto::Fraction::operator*(const Fraction & op)const
@@ -898,7 +898,7 @@ Fraction Htto::Fraction::operator*(const Fraction & op)const
 	Fraction f;
 	f.m_denomilator = m_denomilator*op.m_denomilator;
 	f.m_molecular = m_molecular*op.m_molecular;
-	f.Simplification();
+	f.simplification();
 	return f;
 }
 Fraction Htto::Fraction::operator/(const Fraction & op)const
@@ -906,7 +906,7 @@ Fraction Htto::Fraction::operator/(const Fraction & op)const
 	Fraction f;
 	f.m_denomilator = m_denomilator*op.m_molecular;
 	f.m_molecular = m_molecular*op.m_denomilator;
-	f.Simplification();
+	f.simplification();
 	return f;
 }
 bool Htto::Fraction::operator==(const Fraction & op)const

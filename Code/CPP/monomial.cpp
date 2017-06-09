@@ -133,7 +133,7 @@ Monomial Htto::Monomial::operator/(const Monomial & M) const
 	{
 		throw std::runtime_error("a Monomial try to divided by zero.");
 	}
-	ret.coef = coef*(M.coef.GetReciprocal());
+	ret.coef = coef*(M.coef.getReciprocal());
 	ret.variableTable = variableTable;
 	for (std::map<std::string, Fraction>::const_iterator it = M.variableTable.cbegin();it != M.variableTable.cend();it++)
 	{

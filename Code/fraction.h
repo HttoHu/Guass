@@ -101,9 +101,9 @@ namespace Htto
 		Fraction pow(int times);//计算这个的times次方
 		Fraction get_sqrt_value();
 		void numsqrt();//平方.
-		void Simplification();//化简
-		void Reciprocal();//取倒数
-		Fraction GetReciprocal()const;//记住这个函数性能可以更好。
+		void simplification();//化简
+		void reciprocal();//取倒数
+		Fraction getReciprocal()const;//记住这个函数性能可以更好。
 		std::string ToString()const;//换为String
 		//=================operator=========================
 		Fraction operator+(const Fraction & op)const;
