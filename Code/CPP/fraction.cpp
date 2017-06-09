@@ -754,6 +754,12 @@ Fraction Htto::Fraction::pow(int times)
 	else
 		return temp;
 }
+Fraction Htto::Fraction::get_sqrt_value()
+{
+	Fraction ret = *this;
+	ret.numsqrt();
+	return ret;
+}
 void Htto::Fraction::numsqrt()
 {
 	Simplification();

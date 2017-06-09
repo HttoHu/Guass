@@ -99,6 +99,7 @@ namespace Htto
 		Fraction operator= (std::string  str);
 		//======================常用操作====================
 		Fraction pow(int times);//计算这个的times次方
+		Fraction get_sqrt_value();
 		void numsqrt();//平方.
 		void Simplification();//化简
 		void Reciprocal();//取倒数
