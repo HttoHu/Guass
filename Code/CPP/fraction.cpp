@@ -27,23 +27,69 @@ unsigned int SearchR1R2(string str, unsigned int index)
 //==================一些构造函数啥的================
 Htto::Radical_Exp::Radical_Exp(std::string str)
 {
-	vector<string> numberPart;
+	std::string temp = "";
+	/*
 	unsigned int index = 0;
 	string ache;
 	while (index < str.size())
 	{
-		int oindex = index;
-		index = SearchR1R2(str, index + 1);
-		string echo = str.substr(oindex, index - oindex);
-		numberPart.push_back(echo);
+	int oindex = index;
+	index = SearchR1R2(str, index+1);
+	string echo = str.substr(oindex, index - oindex);
+	numberPart.push_back(echo);
 	}
 	Radical_Number Transform;
 	for (unsigned int i = 0;i < numberPart.size();i++)
 	{
-		Transform = Transform.StrSimpleCount(numberPart[i]);
-		//std::cout << numberPart[i]<<"\n\n";
-		ExpVec.push_back(Transform);
+	Transform = Transform.StrSimpleCount(numberPart[i]);
+	//std::cout << numberPart[i]<<"\n\n";
+	ExpVec.push_back(Transform);
 	}
+	*/
+	int state = 0;
+	for (const auto & a : str)
+	{
+		if (a == '+')
+			state = 2;
+		else if (a == '-')
+			state = 3;
+		else
+			state = 0;
+		switch (state)
+		{
+		case 0://普通状态
+			temp += a;
+			break;
+		case 2://遇到+号
+			if (temp == "")
+				continue;
+			else
+			{
+				ExpVec.push_back(Radical_Number(temp));
+				temp = "";
+			}
+
+			break;
+		case 3://遇到-号.
+			if (temp == "")
+			{
+				temp += a;
+				continue;
+			}
+			else
+			{
+				ExpVec.push_back(Radical_Number(temp));
+				temp = "";
+				temp += a;
+				continue;
+			}
+		default:
+			break;
+		}
+	}
+	if (temp != "")
+		ExpVec.push_back(Radical_Number(temp));
+
 }
 std::string Htto::Radical_Exp::ToString()const
 {
@@ -258,38 +304,81 @@ bool isSquareNumber(int n)
 }
 Htto::Radical_Number::Radical_Number(std::string str)
 {
-	bool isNa;
-	if (str[0] == '+')
+/*old
+bool isNa;
+if (str[0] == '+')
+{
+str = str.substr(0);
+isNa = false;
+}
+else if (str[0] == '-')
+{
+str = str.substr(1);
+isNa = true;
+}
+if (str.find("@") == std::string::npos)
+{
+outNumber = StrToNum(str);
+inNumber = 1;
+return;
+}
+unsigned int index = str.find("@");
+if (index == 0)
+{
+outNumber = 1;
+inNumber = StrToNum(str.substr(index + 1));
+if (isNa)
+outNumber = -outNumber;
+return;
+}
+outNumber = StrToNum(str.substr(0, index));
+inNumber = StrToNum(str.substr(index + 1));
+if (isNa)
+{
+outNumber = -outNumber;
+}*/
+	//要知道改动以前的函数是十分具有风险的.
+	int state = 0;
+	bool test = false;
+	std::string temp;
+	for (const auto & a : str)
 	{
-		str = str.substr(0);
-		isNa = false;
+		if (isdigit(a))
+		{
+			state = 0;
+		}
+		else if (a == '@')
+		{
+			test = true;
+			state = 1;
+		}
+		switch (state)
+		{
+		case 0:
+			temp += a;
+			break;
+		case 1:
+			if (temp != "")
+			{
+				outNumber = StrToNum(temp);
+				temp = "";
+			}
+			break;
+		default:
+			break;
+		}
+
 	}
-	else if (str[0] == '-')
+	if (!test&&temp!="")
 	{
-		str = str.substr(1);
-		isNa = true;
-	}
-	if (str.find("@") == std::string::npos)
-	{
-		outNumber = StrToNum(str);
+		outNumber = StrToNum(temp);
 		inNumber = 1;
 		return;
 	}
-	unsigned int index = str.find("@");
-	if (index == 0)
-	{
-		outNumber = 1;
-		inNumber = StrToNum(str.substr(index + 2));
-		if (isNa)
-			outNumber = -outNumber;
-		return;
-	}
-	outNumber = StrToNum(str.substr(0, index));
-	inNumber = StrToNum(str.substr(index + 2));
-	if (isNa)
-	{
-		outNumber = -outNumber;
-	}
+	if (temp != "")
+		inNumber = StrToNum(temp);
+	else
+		inNumber = 1;
 }
 //化简函数
 void Htto::Radical_Number::Simplifaction()
@@ -522,9 +611,12 @@ Htto::Fraction::Fraction(Radical_Exp up, Radical_Exp under)
 }
 Htto::Fraction::Fraction(std::string str)
 {
+	//这是我以前的手法,分割字符转分析法,效率比较低bug比较多.Fraction很久之前就写的,修改起来很复杂.我现在只能确保它的正确性和稳定性.
 	if (str == "")
+	{
 		throw std::runtime_error("Fraction cannot covert a empty str.");
-	if (str.find('/') == std::string::npos)
+	}
+	if (str.find('/') == std::string::npos&&str.find('@')==std::string::npos)
 	{
 		float fla=StringTools::string_to_float(str);
 		int test = fla;
@@ -547,8 +639,8 @@ Htto::Fraction::Fraction(std::string str)
 		}
 		return;
 	}
-	string tpstr = Htto::StringTools::get_rid_of_parentheses(str);
-	if (tpstr.find('/') == std::string::npos)
+	string tpstr = Htto::StringTools::get_rid_of_parentheses(str);//这是什么???? 问问半年前的我????????
+	if (tpstr.find('/') == std::string::npos&&tpstr.find('(')!=std::string::npos)//然后我就看不懂了,去除括号吗...先不管他应该是对的.
 	{
 		string init = Htto::StringTools::get_match_content(str);
 		Fraction tp = Fraction(init);
@@ -558,12 +650,19 @@ Htto::Fraction::Fraction(std::string str)
 		Simplification();
 		return;
 	}
-
+	else if (str.find('/') == std::string::npos&&tpstr.find('@') != std::string::npos)
+	{
+		m_molecular = Radical_Exp(str);
+		//std::cout << str;
+		m_denomilator = Radical_Exp("1");
+		return;
+	}
 	size_t index = str.find('/');
+
 	string upper = str.substr(0, index);
 	string under = str.substr(index + 1);
-	m_molecular.reset(upper);
-	m_denomilator.reset(under);
+	m_molecular = Radical_Exp(upper);
+	m_denomilator = Radical_Exp(under);
 
 }
 Htto::Fraction::Fraction(int a, int b)

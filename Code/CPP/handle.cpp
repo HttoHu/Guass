@@ -221,9 +221,11 @@ float Htto::StringTools::string_to_float(std::string str)
 		index++;
 	}
 	if (index == str.size())
+	{
 		if (isN&&str[0]=='-')
 			return -(float)frontPart;
 		return (float)frontPart;
+	}
 	index++;
 	float ret = (float)frontPart;
 	tv = 1;
@@ -232,7 +234,7 @@ float Htto::StringTools::string_to_float(std::string str)
 		tv *= 10;
 		ret += (float)(str[index++] - 48) / (float)tv;
 	}
-	if (isN)
+	if (isN&&str[0]=='-')
 		return -ret;
 	return ret;
 }
