@@ -1,4 +1,4 @@
-﻿#include "../../FractionTest.h"
+﻿#include "../polynomial.h"
 //@ ⁰
 //b*[^:b#/]+.*$
 int main()
@@ -7,10 +7,7 @@ int main()
 	using namespace std;
 	try
 	{
-		//std::cout << Htto::StringTools::get_match_content("x");
-		//Radical_Exp r("2@2+3@3");
-		//std::cout << r.ToString();
-		Htto::Show::FractionInit();
+
 	}
 	catch (std::exception & e)
 	{
