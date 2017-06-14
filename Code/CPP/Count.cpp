@@ -24,7 +24,10 @@ unit Push_unit(int & index, std::string input)
 {
 	unit ret;
 	if (index > input.size())
-		throw std::out_of_range("stringTools.cpp->get_number_end_index: index too large");
+	{
+		throw std::out_of_range("out of index");
+	}
+
 	if (Htto::StringTools::isSingleNumber(input[index]))
 	{
 		ret.numData = StringToFloat(Htto::StringTools::get_number_by_index(input, index));
@@ -67,7 +70,53 @@ unit Push_unit(int & index, std::string input)
 	index++;
 	return ret;
 }
-std::list <unit> Simple_Count::PushToList(std::string input)
+bool Htto::Count::SimpleCount::IsCountSign(char c)
+{
+	if (c == '(' || c == ')' || c == '+' || c == '-' || c == '*' || c == '/'||c=='^')
+		return true;
+	else
+		return false;
+}
+Htto::Count::ExpressionList<Htto::Polynomial> Htto::Count::SimpleCount::PushToListP(const std::string & str)
+{
+	int state = 0;
+	ExpressionList<Htto::Polynomial> ret;
+	Polynomial poly_temp;
+	std::string str_temp;
+	for (const auto & a : str)
+	{
+		if (IsCountSign(a))
+		{
+			state = 2;
+			//std::cout << "SEARCH DOG";
+		}
+		else
+			state = 0;
+		switch (state)
+		{
+		case 0:
+			str_temp += a;
+			break;
+		case 2:
+			if (str_temp == "")
+			{
+				ret.push_back(Element<Polynomial>(std::string(1,a), false,get_priority(a)));
+				continue;
+			}
+			ret.push_back(Element<Polynomial>(str_temp, true));
+			str_temp = "";
+			ret.push_back(Element<Polynomial>(std::string(1,a),false,get_priority(a)));
+			break;
+		default:
+			break;
+		}
+
+	}
+	if(str_temp!="")
+		ret.push_back(Element<Polynomial>(str_temp, true));
+	return ret;
+}
+std::list <unit> SimpleCount::PushToListF(std::string input)
 {
 	std::list<unit> ret;
 	string_replace(input, "@", std::string() + '@');
@@ -78,7 +127,7 @@ std::list <unit> Simple_Count::PushToList(std::string input)
 	}
 	return ret;
 }
-std::list<unit> Simple_Count::InfixToPostfix(std::list<unit>& ExpStream)
+std::list<unit> SimpleCount::InfixToPostfix(std::list<unit>& ExpStream)
 {
 	std::list<unit> output;
 	std::stack<unit> Stack;
@@ -123,7 +172,7 @@ std::list<unit> Simple_Count::InfixToPostfix(std::list<unit>& ExpStream)
 	}
 	return output;
 }
-Htto::Fraction Simple_Count::GetCountResult(const std::list<unit>& exp)
+Htto::Fraction SimpleCount::GetCountResult(const std::list<unit>& exp)
 {
 	Htto::Fraction ret;
 	Htto::Fraction tp1;
@@ -189,14 +238,29 @@ Htto::Fraction Simple_Count::GetCountResult(const std::list<unit>& exp)
 	}
 	return Stack.top();
 }
-Htto::Fraction Simple_Count::Count(const std::string str)
+Htto::Fraction SimpleCount::Count(const std::string str)
 {
 	Htto::BalanceStack bs(str);
 	if (!bs.checkBalance())
 	{
 		throw std::runtime_error("str is bad try to reput");
 	}
-	std::list<unit> x1 = PushToList(str);
+	std::list<unit> x1 = PushToListF(str);
 	x1 = InfixToPostfix(x1);
 	return GetCountResult(x1);
+}
+
+int Htto::Count::get_priority(char ch)
+{
+	if (ch == '+' || ch == '-')
+		return 1;
+	else if (ch == '*' || ch == '/')
+		return 2;
+	else if (ch == '^')
+		return 3;
+	else if (ch == '(')
+		return -5;
+	else if (ch == ')')
+		return 100;
+	return 0;
 }

@@ -33,8 +33,8 @@ Htto::Monomial::Monomial(std::string str)
 		{
 			if (tp_name != "")
 			{
-				if (isNumebr(tp_times))
-					throw std::runtime_error("bad input");
+				if (!isNumebr(tp_times))
+					throw std::runtime_error("Monomial bad input");
 				if (tp_times == "")
 				{
 					tp_times = "1";
@@ -72,8 +72,8 @@ Htto::Monomial::Monomial(std::string str)
 	}
 	if (tp_name != "")
 	{
-		if (isNumebr(tp_times))
-			throw std::runtime_error("bad input");
+		if (!isNumebr(tp_times))
+			throw std::runtime_error("Monomial bad input");
 		if (tp_times == "")
 		{
 			tp_times = "1";
@@ -133,7 +133,7 @@ Monomial Htto::Monomial::operator/(const Monomial & M) const
 	{
 		throw std::runtime_error("a Monomial try to divided by zero.");
 	}
-	ret.coef = coef*(M.coef.getReciprocal());
+	ret.coef = coef*(M.coef.get_reciprocal());
 	ret.variableTable = variableTable;
 	for (std::map<std::string, Fraction>::const_iterator it = M.variableTable.cbegin();it != M.variableTable.cend();it++)
 	{
@@ -226,7 +226,7 @@ std::string Htto::Monomial::name() const
 	string ret;
 	for (std::map<string, Fraction>::const_iterator it = variableTable.cbegin();it != variableTable.cend();it++)
 	{
-		ret += it->first;
+		ret += it->first+"^"+it->second.ToString();
 	}
 	return ret;
 }
@@ -272,4 +272,10 @@ Fraction Htto::Monomial::times()const
 std::map<std::string, Fraction> Htto::Monomial::debug() const
 {
 	return variableTable;
+}
+
+Monomial  Htto::operator-(Monomial  fra)
+{
+	fra.coef = -fra.coef;
+	return fra;
 }

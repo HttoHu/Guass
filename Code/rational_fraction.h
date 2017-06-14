@@ -11,10 +11,10 @@ namespace Htto
 		Rational_fraction(const std::string &  str);
 		std::string ToString();
 
-		Rational_fraction operator+ (const Rational_fraction);
-		Rational_fraction operator- (const Rational_fraction);
-		Rational_fraction operator* (const Rational_fraction);
-		Rational_fraction operator/ (const Rational_fraction);
+		Rational_fraction operator+ (const Rational_fraction&)const;
+		Rational_fraction operator- (const Rational_fraction&)const;
+		Rational_fraction operator* (const Rational_fraction&)const;
+		Rational_fraction operator/ (const Rational_fraction&)const;
 		void debug();
 	private:
 		//·Ö×Ó

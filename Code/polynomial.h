@@ -10,6 +10,7 @@ namespace Htto
 	//除以一个单项式是没有问题的。我将写一个分式类来处理除法问题。
 	class Polynomial
 	{
+		friend Polynomial operator-(Polynomial  fra);
 	public:
 		Polynomial() = default;
 		Polynomial(std::string str);
@@ -35,6 +36,8 @@ namespace Htto
 		{
 			return data;
 		}
+		int convert_to_int() { return (int)data[0].coef; }
+		operator int() { return convert_to_int(); }
 	private:
 		std::vector<Monomial> data;
 		void push_monomial(const std::string & str);

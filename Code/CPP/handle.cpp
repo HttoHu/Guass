@@ -185,7 +185,7 @@ int Htto::StringTools::get_end_index(std::string str, unsigned index)
 std::string Htto::StringTools::get_number_by_index(std::string str, unsigned index)
 {
 	if (index >= str.size())
-		throw std::out_of_range("stringTools.cpp->get_number_end_index: index too large");
+		throw std::out_of_range("stringTools.cpp->get_number_end_index: hhindex toa large");
 	int endPos = index;
 	while (isSingleNumber(str[endPos]))
 	{

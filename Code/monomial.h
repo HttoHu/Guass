@@ -10,16 +10,19 @@
 #include <map>
 namespace Htto
 {
+	class Polynomial;
 	class Monomial
 	{
 	private:
 		friend class Polynomial;
+		friend Polynomial operator-(Polynomial  fra);
+		friend Monomial operator-(Monomial  fra);
 		Fraction coef;//系数
 		std::map<std::string, Fraction> variableTable;
 	public:
 		Monomial() = default;
 		Monomial(std::string str);
-		Monomial(const Monomial& M):variableTable(M.variableTable),coef(M.coef){}
+		Monomial(const Monomial& M) :variableTable(M.variableTable), coef(M.coef) {}
 		Monomial & operator=(const Monomial & M)
 		{
 			variableTable = M.variableTable;
@@ -34,7 +37,7 @@ namespace Htto
 		bool operator >(const Monomial & M)const;
 		std::string ToString()const;
 		std::string name()const;
-		static bool is_like_term(const Monomial &,const Monomial &);//判断是否是同类项
+		static bool is_like_term(const Monomial &, const Monomial &);//判断是否是同类项
 		void simplifiction();
 		Fraction times()const;
 		std::map<std::string, Fraction>  debug()const;

@@ -1,5 +1,5 @@
 #include "../rational_fraction.h"
-
+using namespace Htto;
 Htto::Rational_fraction::Rational_fraction(const std::string & str)
 {
 	std::string tempStr;
@@ -74,6 +74,15 @@ std::string Htto::Rational_fraction::ToString()
 	if (m_denomilator.ToString() == "1")
 		return m_molecular.ToString();
 	return "(" + m_molecular.ToString() + std::string(")/(") + m_denomilator.ToString() + ")";
+}
+
+Rational_fraction Htto::Rational_fraction::operator+(const Rational_fraction & r_fraction)const
+{
+	Polynomial den = m_denomilator*r_fraction.m_denomilator;
+	Rational_fraction ret;
+	ret.m_denomilator = den;
+	ret.m_molecular = (m_molecular*den) + (r_fraction.m_molecular*den);
+	return ret;
 }
 
 void Htto::Rational_fraction::debug()

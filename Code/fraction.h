@@ -103,7 +103,7 @@ namespace Htto
 		void numsqrt();//平方.
 		void simplification();//化简
 		void reciprocal();//取倒数
-		Fraction getReciprocal()const;//记住这个函数性能可以更好。
+		Fraction get_reciprocal()const;//记住这个函数性能可以更好。
 		std::string ToString()const;//换为String
 		//=================operator=========================
 		Fraction operator+(const Fraction & op)const;
@@ -118,6 +118,6 @@ namespace Htto
 		bool operator<=(const Fraction & op)const;
 		bool operator>=(const Fraction & op)const;
 		operator float()const;
-		float GetFloatValue()const;
+		float get_float_value()const;
 	};
 }

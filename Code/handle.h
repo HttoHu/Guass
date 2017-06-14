@@ -9,13 +9,14 @@ namespace Htto
 	public:
 		static int INT_GCD(int n, int m);//获得公因数
 		static int INT_MAX_FACTOR(int n);//获得最大的平方公因数
-		 template<typename T>static T ABS(T a) { if (a > 0) { return a; } else return -a; }//求绝对值
-		template<typename T>static T Pow(const T & rhs, unsigned int lhs)
+		template<typename T>static T ABS(T a) { if (a > 0) { return a; } else return -a; }//求绝对值
+		template<typename T>static T Pow(const T&  rhs, unsigned int lhs)
 		{
 			T ret = rhs;
 			for (int i = 1;i < lhs;i++)
 			{
 				ret = ret*rhs;
+				ret.simplification();
 			}
 			return ret;
 		}//求绝对值

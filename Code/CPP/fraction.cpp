@@ -820,7 +820,7 @@ void Htto::Fraction::reciprocal()
 		throw std::runtime_error("zero cann't be m_denomilator");
 	std::swap(m_denomilator, m_molecular);
 }
-Fraction Htto::Fraction::getReciprocal()const
+Fraction Htto::Fraction::get_reciprocal()const
 {
 	Fraction ret = *this;
 	if (m_denomilator == 0)
@@ -911,29 +911,29 @@ Fraction Htto::Fraction::operator/(const Fraction & op)const
 }
 bool Htto::Fraction::operator==(const Fraction & op)const
 {
-	return (GetFloatValue() == op.GetFloatValue());
+	return (get_float_value() == op.get_float_value());
 }
 bool Htto::Fraction::operator<(const Fraction & op)const
 {
-	return (GetFloatValue() < op.GetFloatValue());
+	return (get_float_value() < op.get_float_value());
 }
 bool Htto::Fraction::operator>(const Fraction & op)const
 {
-	return (GetFloatValue() > op.GetFloatValue());
+	return (get_float_value() > op.get_float_value());
 }
 bool Htto::Fraction::operator<=(const Fraction & op)const
 {
-	return (GetFloatValue() <= op.GetFloatValue());
+	return (get_float_value() <= op.get_float_value());
 }
 bool Htto::Fraction::operator>=(const Fraction & op)const
 {
-	return (GetFloatValue() >= op.GetFloatValue());
+	return (get_float_value() >= op.get_float_value());
 }
 Htto::Fraction::operator float()const
 {
-	return GetFloatValue();
+	return get_float_value();
 }
-float Htto::Fraction::GetFloatValue()const
+float Htto::Fraction::get_float_value()const
 {
 	return (float)m_molecular / (float)m_denomilator;
 }

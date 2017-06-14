@@ -167,6 +167,7 @@ Polynomial Htto::Polynomial::operator-(const Polynomial & poly)const
 	return ret;
 }
 
+
 Polynomial Htto::Polynomial::operator*(const Polynomial & poly)const
 {
 	Polynomial ret;
@@ -226,4 +227,13 @@ Polynomial & Htto::Polynomial::operator/=(const Polynomial &poly)
 	Polynomial ret = *this / poly;
 	data = ret.data;
 	return *this;
+}
+
+Polynomial Htto::operator-(Polynomial fra)
+{
+	for (auto & a : fra.data)
+	{
+		a = -a;
+	}
+	return fra;
 }
