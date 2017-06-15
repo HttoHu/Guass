@@ -7,7 +7,6 @@ using namespace Htto;
 using std::string;
 using std::cout;
 using std::vector;
-#define CONSOLE_DEBUG
 //===============一些野生函数=====================
 bool isR1R2(char ch)
 {

@@ -2,7 +2,7 @@
 #include "polynomial.h"
 #include <stack>
 #include <list>
-#define CONSOLE_DEBUG
+
 namespace Htto
 {
 	namespace Count

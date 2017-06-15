@@ -26,8 +26,8 @@ int main()
 	start = clock();
 	try
 	{
-		//Example::polynomial_counter();
-		Example::simple_equation();
+		Example::polynomial_counter();
+		//Example::simple_equation();
 		//std::cout << StringTools::convert_expression("-1");
 		/*Polynomial p2("x-1");
 		std::cout << (p1*p2).ToString();
