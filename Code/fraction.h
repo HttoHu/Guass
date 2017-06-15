@@ -88,7 +88,7 @@ namespace Htto
 		//分母
 		Radical_Exp m_denomilator;
 	public:
-		Fraction() = default;
+		Fraction():m_denomilator("1"),m_molecular("0"){ }
 		Fraction(Radical_Exp up, Radical_Exp under);
 		Fraction(std::string str);
 		Fraction(int a, int b);
@@ -96,7 +96,6 @@ namespace Htto
 		Fraction(const Fraction & fra);
 		Fraction(Fraction && fra)noexcept = default;
 		Fraction& operator= (const Fraction & fra);
-		Fraction operator= (std::string  str);
 		//======================常用操作====================
 		Fraction pow(int times);//计算这个的times次方
 		Fraction get_sqrt_value();

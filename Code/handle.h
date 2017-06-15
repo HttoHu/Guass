@@ -25,6 +25,8 @@ namespace Htto
 	class StringTools
 	{
 	public:
+		//这个函数是来多项式计算使用,因为后缀计算并不能处理有些情况.比如你输入(x+1)(x-1)他会转换为(x+1)*(x-1). -(x+1)=> -1*(x+1)
+		static std::string convert_expression(std::string str);
 		static float string_to_float(std::string str);
 		static bool isNumber_int(std::string str);
 		static bool isNumber(std::string str);
@@ -34,6 +36,7 @@ namespace Htto
 		static std::string get_match_content(std::string parameter, int n = 1);
 		static int get_end_index(std::string str, unsigned index);//那个我太懒了，什么tuple算了吧
 		static std::string get_number_by_index(std::string str, unsigned index);
+	private:
 	};
 }
 #endif

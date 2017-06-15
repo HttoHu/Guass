@@ -7,6 +7,7 @@ using namespace Htto;
 using std::string;
 using std::cout;
 using std::vector;
+#define CONSOLE_DEBUG
 //===============一些野生函数=====================
 bool isR1R2(char ch)
 {
@@ -611,10 +612,22 @@ Htto::Fraction::Fraction(Radical_Exp up, Radical_Exp under)
 }
 Htto::Fraction::Fraction(std::string str)
 {
-	//这是我以前的手法,分割字符转分析法,效率比较低bug比较多.Fraction很久之前就写的,修改起来很复杂.我现在只能确保它的正确性和稳定性.
+	//这是我以前的手法,分割字符大法然后针对各个情况进行分析,效率比较低bug比较多.Fraction很久之前就写的,修改起来很复杂.我现在只能确保它的正确性和稳定性.
 	if (str == "")
 	{
 		throw std::runtime_error("Fraction cannot covert a empty str.");
+	}
+	else if (str == "-")
+	{
+		m_molecular = Radical_Exp("-1");
+		m_denomilator = Radical_Exp("1");
+		return;
+	}
+	else if (str == "+")
+	{
+		m_molecular = Radical_Exp("1");
+		m_denomilator = Radical_Exp("1");
+		return;
 	}
 	if (str.find('/') == std::string::npos&&str.find('@')==std::string::npos)
 	{
@@ -658,7 +671,6 @@ Htto::Fraction::Fraction(std::string str)
 		return;
 	}
 	size_t index = str.find('/');
-
 	string upper = str.substr(0, index);
 	string under = str.substr(index + 1);
 	m_molecular = Radical_Exp(upper);
@@ -704,33 +716,6 @@ Fraction& Htto::Fraction::operator=(const Fraction & fra)
 {
 	m_molecular = fra.m_molecular;
 	m_denomilator = fra.m_denomilator;
-	return *this;
-}
-Fraction Htto::Fraction::operator=(string str)
-{
-	if (str == "")
-		throw std::runtime_error("Fraction cannot covert a empty str.");
-	if (str.find('/') == std::string::npos)
-	{
-		str += "/1";
-	}
-	string tpstr = Htto::StringTools::get_rid_of_parentheses(str);
-	if (tpstr.find('/') == std::string::npos)
-	{
-		string init = Htto::StringTools::get_match_content(str);
-		Fraction tp = Fraction(init);
-		tp.numsqrt();
-		m_denomilator = tp.m_denomilator;
-		m_molecular = tp.m_molecular;
-		simplification();
-		return *this;
-	}
-
-	size_t index = str.find('/');
-	string upper = str.substr(0, index);
-	string under = str.substr(index + 1);
-	m_molecular.reset(upper);
-	m_denomilator.reset(under);
 	return *this;
 }
 //============================================

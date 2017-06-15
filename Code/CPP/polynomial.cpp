@@ -64,6 +64,7 @@ void Htto::Polynomial::simplification()
 
 std::string Htto::Polynomial::ToString()const
 {
+	get_rid_of_zero_monomial();
 	std::string ret;
 	for (size_t i=0;i<data.size();i++)
 	{
@@ -129,6 +130,22 @@ bool Htto::Polynomial::operator==(Polynomial  poly) const
 	m.simplification();
 	poly.simplification();
 	return m.ToString() == poly.ToString();
+}
+
+void Htto::Polynomial::get_rid_of_zero_monomial()const
+{
+	using iterator = std::vector<Htto::Monomial>::iterator;
+	for (iterator it = data.begin();it != data.end();)
+	{
+		iterator it2 = it;
+		if (it2->coef == Htto::Fraction("0"))
+		{
+			it++;
+			data.erase(it2);
+		}
+		else
+			it++;
+	}
 }
 
 void Htto::Polynomial::push_monomial(const std::string & str)
@@ -227,6 +244,18 @@ Polynomial & Htto::Polynomial::operator/=(const Polynomial &poly)
 	Polynomial ret = *this / poly;
 	data = ret.data;
 	return *this;
+}
+
+Fraction Htto::Polynomial::find(std::string str)
+{
+	for (const auto & a : data)
+	{
+		if (a.name() == str)
+		{
+			return a.get_coef();
+		}
+	}
+	throw std::runtime_error("Fraction::<public>find:    no found this term");
 }
 
 Polynomial Htto::operator-(Polynomial fra)

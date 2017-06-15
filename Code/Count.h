@@ -2,6 +2,7 @@
 #include "polynomial.h"
 #include <stack>
 #include <list>
+#define CONSOLE_DEBUG
 namespace Htto
 {
 	namespace Count
@@ -59,6 +60,7 @@ namespace Htto
 			T & begin() { return data.begin(); }
 			T& end() { return data.end(); }
 			//void operator++() { data++; }
+#ifdef CONSOLE_DEBUG
 			void debug()
 			{
 				std::cout << "DEBUG Start:print all elements\n";
@@ -69,6 +71,7 @@ namespace Htto
 				std::cout << "And size is: ";
 				std::cout << data.size() << std::endl << "End Debug.";
 			}
+#endif
 		};
 		class SimpleCount
 		{
@@ -90,7 +93,9 @@ namespace Htto
 			UniversalCount(const ExpressionList<T> & explist) :data(explist) {}
 			void Add(const ExpressionList<T> & explist) { data.Add(explist.data); }
 			void InfixToPostfix(const ExpressionList<T> & explist);
+#ifdef CONSOLE_DEBUG
 			void debug() { data.debug(); }
+#endif
 			T Count()
 			{
 				T ret;
@@ -113,7 +118,6 @@ namespace Htto
 							tp1 = Stack.top();
 							Stack.pop();
 							Stack.push(tp1 + tp2);
-							Stack.top().simplification();
 						}
 						else if (a.strData == "-")
 						{
@@ -123,7 +127,6 @@ namespace Htto
 							Stack.pop();
 
 							Stack.push(tp1 - tp2);
-							Stack.top().simplification();
 
 						}
 						else if (a.strData == "*")
@@ -134,7 +137,6 @@ namespace Htto
 							Stack.pop();
 
 							Stack.push(tp1 * tp2);
-							Stack.top().simplification();
 						}
 						else if (a.strData == "/")
 						{
@@ -144,7 +146,6 @@ namespace Htto
 							Stack.pop();
 
 							Stack.push(tp1 / tp2);
-							Stack.top().simplification();
 						}
 						else if (a.strData == "^")
 						{
@@ -154,11 +155,11 @@ namespace Htto
 							Stack.pop();
 							tp1 = Htto::Handle::Pow(tp1, tp3);
 							Stack.push(tp1);
-							Stack.top().simplification();
 						}
 					}
 				}
 				ret = Stack.top();
+				ret.simplification();
 				return ret;
 			}
 		private:

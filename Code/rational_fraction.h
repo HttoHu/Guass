@@ -15,7 +15,9 @@ namespace Htto
 		Rational_fraction operator- (const Rational_fraction&)const;
 		Rational_fraction operator* (const Rational_fraction&)const;
 		Rational_fraction operator/ (const Rational_fraction&)const;
+#ifdef CONSOLE_DEBUG
 		void debug();
+#endif
 	private:
 		//·Ö×Ó
 		Polynomial m_molecular;

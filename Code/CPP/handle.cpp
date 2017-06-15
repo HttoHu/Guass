@@ -197,6 +197,44 @@ std::string Htto::StringTools::get_number_by_index(std::string str, unsigned ind
 	return str.substr(index, endPos);
 }
 
+std::string Htto::StringTools::convert_expression(std::string str)
+{
+	int index = 0;
+	int state = 0;
+	int old_state = 0;
+	for (const auto & a : str)
+	{
+		old_state = state;
+		if (isdigit(a) || isalpha(a))
+			state = 1;
+		else if (a == '+' || a == '-')
+			state = 2;
+		else if (a == '(')
+		{
+			state = 3;
+		}
+		else if (a == ')')
+			state = 4;
+		else
+			state = 0;
+		switch (state)
+		{
+		case 3:
+			if (old_state == 2 && index == 1)
+			{
+				str.insert(index , "1*");
+			}
+			if (old_state == 1 || old_state == 4)
+				str.insert(index, "*");
+			break;
+		default:
+			break;
+		}
+		index++;
+	}
+	return str;
+}
+
 float Htto::StringTools::string_to_float(std::string str)
 {
 	bool isN = ((str[0] == '-')||(str[0]=='+'));

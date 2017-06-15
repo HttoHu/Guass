@@ -2,13 +2,14 @@
 #include "../Count.h"
 #include "../equation.h"
 #include <time.h>
+#include "../Examples/polynomial_counter.h"
 #ifdef _WIN32
 #include <Windows.h>
 #include<psapi.h>
 
 //@ ⁰
 //b*[^:b#/]+.*$
-void showMemoryInfo(void)
+void showMemoryInfo()
 {
 	HANDLE handle = GetCurrentProcess();
 	PROCESS_MEMORY_COUNTERS pmc;
@@ -25,13 +26,12 @@ int main()
 	start = clock();
 	try
 	{
-		std::cout << "input an equation:\n";
-		std::string input;
-		while (input!="q")
-		{
-			cin >> input;
-			std::cout << Count::Equation::get_polynomial(input).ToString()<<"=0\n";
-		}
+		//Example::polynomial_counter();
+		Example::simple_equation();
+		//std::cout << StringTools::convert_expression("-1");
+		/*Polynomial p2("x-1");
+		std::cout << (p1*p2).ToString();
+		*/
 	}
 	catch (std::exception & e)
 	{

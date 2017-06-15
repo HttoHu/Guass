@@ -268,12 +268,12 @@ Fraction Htto::Monomial::times()const
 	}
 	return ret;
 }
-
+#ifdef CONSOLE_DEBUG
 std::map<std::string, Fraction> Htto::Monomial::debug() const
 {
 	return variableTable;
 }
-
+#endif
 Monomial  Htto::operator-(Monomial  fra)
 {
 	fra.coef = -fra.coef;

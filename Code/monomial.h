@@ -39,7 +39,13 @@ namespace Htto
 		std::string name()const;
 		static bool is_like_term(const Monomial &, const Monomial &);//判断是否是同类项
 		void simplifiction();
+		Fraction get_coef()const
+		{
+			return coef;
+		}
 		Fraction times()const;
+#ifdef CONSOLE_DEBUG
 		std::map<std::string, Fraction>  debug()const;
+#endif
 	};
 }

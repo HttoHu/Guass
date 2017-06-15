@@ -84,10 +84,11 @@ Rational_fraction Htto::Rational_fraction::operator+(const Rational_fraction & r
 	ret.m_molecular = (m_molecular*den) + (r_fraction.m_molecular*den);
 	return ret;
 }
-
+#ifdef CONSOLE_DEBUG
 void Htto::Rational_fraction::debug()
 {
 	std::cout << "rational_fraction debug msg:\n";
 	std::cout << m_molecular.ToString()<<std::endl;
 	std::cout << m_denomilator.ToString() << std::endl;
 }
+#endif

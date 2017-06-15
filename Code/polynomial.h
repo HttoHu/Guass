@@ -32,14 +32,21 @@ namespace Htto
 		Polynomial& operator -=(const Polynomial &);
 		Polynomial& operator *=(const Polynomial &);
 		Polynomial& operator /=(const Polynomial &);
+		//输入变量找系数
+		Fraction find(std::string str);
+		Monomial & operator [](size_t sz) { return data[sz]; }
+#ifdef CONSOLE_DEBUG
 		std::vector<Monomial> debug()
 		{
 			return data;
 		}
+#endif
 		int convert_to_int() { return (int)data[0].coef; }
 		operator int() { return convert_to_int(); }
 	private:
-		std::vector<Monomial> data;
+
+		mutable std::vector<Monomial> data;
+		void get_rid_of_zero_monomial()const;
 		void push_monomial(const std::string & str);
 	};
 }

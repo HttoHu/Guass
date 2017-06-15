@@ -80,15 +80,17 @@ bool Htto::Count::SimpleCount::IsCountSign(char c)
 Htto::Count::ExpressionList<Htto::Polynomial> Htto::Count::SimpleCount::PushToListP(const std::string & str)
 {
 	int state = 0;
+	int old_state = 0;
+	int pos = 0;
 	ExpressionList<Htto::Polynomial> ret;
 	Polynomial poly_temp;
 	std::string str_temp;
 	for (const auto & a : str)
 	{
+		old_state = state;
 		if (IsCountSign(a))
 		{
 			state = 2;
-			//std::cout << "SEARCH DOG";
 		}
 		else
 			state = 0;
@@ -98,6 +100,16 @@ Htto::Count::ExpressionList<Htto::Polynomial> Htto::Count::SimpleCount::PushToLi
 			str_temp += a;
 			break;
 		case 2:
+			if ((a == '+' || a == '-') && (pos == 0 || (str_temp == ""&&str[pos] == '(')))
+			{
+				str_temp += a;
+				break;
+			}
+			else if (a == '^'&&old_state == 0)
+			{
+				str_temp += a;
+				break;
+			}
 			if (str_temp == "")
 			{
 				ret.push_back(Element<Polynomial>(std::string(1,a), false,get_priority(a)));
@@ -110,7 +122,7 @@ Htto::Count::ExpressionList<Htto::Polynomial> Htto::Count::SimpleCount::PushToLi
 		default:
 			break;
 		}
-
+		pos++;
 	}
 	if(str_temp!="")
 		ret.push_back(Element<Polynomial>(str_temp, true));
@@ -249,7 +261,6 @@ Htto::Fraction SimpleCount::Count(const std::string str)
 	x1 = InfixToPostfix(x1);
 	return GetCountResult(x1);
 }
-
 int Htto::Count::get_priority(char ch)
 {
 	if (ch == '+' || ch == '-')
