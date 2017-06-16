@@ -5,6 +5,7 @@ namespace Htto
 {
 	namespace Count
 	{
+		//简单方程
 		class Equation
 		{
 		public:
@@ -13,7 +14,16 @@ namespace Htto
 			static Polynomial get_polynomial(const std::string & str);
 			static Polynomial merage(const std::string & left, const std::string & right);
 		private:
-
+		};
+		//多元方程1次方程
+		class Equation2:Equation
+		{
+		public:
+			static std::map<std::string, Fraction>solve(const std::vector<std::string>& vec);
+	//	protected:
+			static Polynomial convert_single_to_polynomial(const std::string & vname, const Polynomial & poly);
+		public:
+			static Fraction solve_driver(std::string v, const std::map<std::string, Polynomial>& table);
 		};
 	}
 }

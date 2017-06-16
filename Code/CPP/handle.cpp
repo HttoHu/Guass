@@ -197,6 +197,21 @@ std::string Htto::StringTools::get_number_by_index(std::string str, unsigned ind
 	return str.substr(index, endPos);
 }
 
+std::string Htto::StringTools::string_replace(std::string  s1, const std::string & s2, const std::string & s3)
+{
+	using std::string;
+	string::size_type pos = 0;
+	string::size_type a = s2.size();
+	string::size_type b = s3.size();
+	while ((pos = s1.find(s2, pos)) != string::npos)
+	{
+		s1.erase(pos, a);
+		s1.insert(pos, s3);
+		pos += b;
+	}
+	return s1;
+}
+
 std::string Htto::StringTools::convert_expression(std::string str)
 {
 	int index = 0;
@@ -219,10 +234,14 @@ std::string Htto::StringTools::convert_expression(std::string str)
 			state = 0;
 		switch (state)
 		{
+		case 1:
+			if (old_state == 4 )
+				str.insert(index, "*");
+			break;
 		case 3:
 			if (old_state == 2 && index == 1)
 			{
-				str.insert(index , "1*");
+				str.insert(index, "1*");
 			}
 			if (old_state == 1 || old_state == 4)
 				str.insert(index, "*");
@@ -237,18 +256,18 @@ std::string Htto::StringTools::convert_expression(std::string str)
 
 float Htto::StringTools::string_to_float(std::string str)
 {
-	bool isN = ((str[0] == '-')||(str[0]=='+'));
+	bool isN = ((str[0] == '-') || (str[0] == '+'));
 	int frontPart = 0;
 	int tv = 1;
 	int index = 0;
 	if (isN)
-	{ 
+	{
 		index++;
 	}
 
 	for (const auto & a : str)
 	{
-		if (std::isdigit(a) || a == '.' || a == '-'||a=='+')
+		if (std::isdigit(a) || a == '.' || a == '-' || a == '+')
 			continue;
 		else
 			throw std::runtime_error("error input" + str + " string_to_float is a bad input");
@@ -260,7 +279,7 @@ float Htto::StringTools::string_to_float(std::string str)
 	}
 	if (index == str.size())
 	{
-		if (isN&&str[0]=='-')
+		if (isN&&str[0] == '-')
 			return -(float)frontPart;
 		return (float)frontPart;
 	}
@@ -272,7 +291,7 @@ float Htto::StringTools::string_to_float(std::string str)
 		tv *= 10;
 		ret += (float)(str[index++] - 48) / (float)tv;
 	}
-	if (isN&&str[0]=='-')
+	if (isN&&str[0] == '-')
 		return -ret;
 	return ret;
 }

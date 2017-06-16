@@ -4,20 +4,46 @@
 #include <string>
 namespace Htto
 {
+	namespace details
+	{
+		struct HasMemberToStringValidator
+		{
+			template <typename T, typename = decltype(&T::simplification)>
+			static std::true_type Test(int);
+
+			template <typename>
+			static std::false_type Test(...);
+		};
+	}
+	template <typename T>
+	struct HasMemberToString :
+		public decltype(details::HasMemberToStringValidator::Test<T>(0))
+	{};
 	class Handle
 	{
 	public:
 		static int INT_GCD(int n, int m);//获得公因数
 		static int INT_MAX_FACTOR(int n);//获得最大的平方公因数
 		template<typename T>static T ABS(T a) { if (a > 0) { return a; } else return -a; }//求绝对值
-		template<typename T>static T Pow(const T&  rhs, unsigned int lhs)
+		//T 仅限用于我自己写的类.
+		template<typename T>static T Pow(const T&  rhs, int lhs)
 		{
 			T ret = rhs;
+			bool isN=false;
+			if (lhs ==0)
+				return T("0");
+			else if (lhs <= 0)
+			{
+				isN == true;
+				lhs = -lhs;
+			}
 			for (int i = 1;i < lhs;i++)
 			{
 				ret = ret*rhs;
 				ret.simplification();
 			}
+			if (isN)
+				return (T("1")/ ret);
 			return ret;
 		}//求绝对值
 		static bool isEqual(int n, float f);
@@ -25,6 +51,7 @@ namespace Htto
 	class StringTools
 	{
 	public:
+		static std::string string_replace(std::string s1, const std::string&s2, const std::string&s3);
 		//这个函数是来多项式计算使用,因为后缀计算并不能处理有些情况.比如你输入(x+1)(x-1)他会转换为(x+1)*(x-1). -(x+1)=> -1*(x+1)
 		static std::string convert_expression(std::string str);
 		static float string_to_float(std::string str);

@@ -3,6 +3,7 @@
 #include <vector>
 #include <set>
 #include <algorithm>
+#define CONSOLE_DEBUG
 namespace Htto
 {
 	//多项式类
@@ -11,17 +12,18 @@ namespace Htto
 	class Polynomial
 	{
 		friend Polynomial operator-(Polynomial  fra);
+		friend class Equation2;
 	public:
 		Polynomial() = default;
 		Polynomial(std::string str);
 		Polynomial(const Polynomial & poly) :data(poly.data) {}
-		Polynomial(const Monomial& mono) :data({ mono }) {}
-		void simplification();
+		Polynomial(Polynomial && poly)noexcept { data = poly.data; }
+		void simplification()const;
 		std::string ToString()const;
 		std::size_t  term_count();
 		std::size_t variable_count();
 		Fraction max_times();
-		void sort();
+		void sort()const;
 		bool operator==(const Polynomial )const;
 		Polynomial & operator =(const Polynomial &) = default;
 		Polynomial operator +(const Polynomial &)const;
@@ -33,6 +35,10 @@ namespace Htto
 		Polynomial& operator *=(const Polynomial &);
 		Polynomial& operator /=(const Polynomial &);
 		//输入变量找系数
+		void remove_term(const Monomial & mono);
+		std::list<std::string> get_variable_list()const;
+		bool isNumber()const;
+		Fraction get_value(const std::map<std::string,Fraction> & vtable)const;
 		Fraction find(std::string str);
 		Monomial & operator [](size_t sz) { return data[sz]; }
 #ifdef CONSOLE_DEBUG
@@ -43,10 +49,10 @@ namespace Htto
 #endif
 		int convert_to_int() { return (int)data[0].coef; }
 		operator int() { return convert_to_int(); }
-	private:
 
-		mutable std::vector<Monomial> data;
 		void get_rid_of_zero_monomial()const;
+	private:
+		mutable std::vector<Monomial> data;
 		void push_monomial(const std::string & str);
 	};
 }

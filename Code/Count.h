@@ -76,6 +76,7 @@ namespace Htto
 		class SimpleCount
 		{
 		public:
+			static Polynomial PolyCount(const std::string& str);
 			static bool IsCountSign(char c);
 			static Count::ExpressionList<Htto::Polynomial>PushToListP(const std::string & str);
 			static std::list<unit> PushToListF(std::string input);
@@ -125,7 +126,6 @@ namespace Htto
 							Stack.pop();
 							tp1 = Stack.top();
 							Stack.pop();
-
 							Stack.push(tp1 - tp2);
 
 						}
@@ -199,7 +199,7 @@ namespace Htto
 				}
 				else
 				{
-					while (!Stack.empty() && index.priority <= Stack.top().priority)
+					while (!Stack.empty() && index.priority <=Stack.top().priority)
 					{
 						output.push_back(Stack.top());
 						Stack.pop();

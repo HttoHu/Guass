@@ -62,3 +62,75 @@ Htto::Polynomial Htto::Count::Equation::merage(const std::string & left, const s
 	Polynomial poly_right = temp.Count();
 	return (poly_left - poly_right);
 }
+
+
+std::map<std::string, Fraction> Htto::Count::Equation2::solve(const std::vector<std::string>& vec)
+{
+	bool can_be_solved = true;;
+	using iterator = std::map<std::string, Htto::Polynomial>::iterator;
+	std::vector<Polynomial> vec_poly(vec.size());
+	std::map<std::string, Htto::Polynomial> trans_table;//Ð¤Ôª±í
+	std::map<std::string, Fraction> result;
+	Polynomial temp;
+	std::string str_temp;
+	for (auto a : vec)
+	{
+		for (iterator it = trans_table.begin();it != trans_table.end();it++)
+		{
+			a = Htto::StringTools::string_replace(a, it->first, it->second.ToString());
+		}
+		temp = get_polynomial(a);
+		temp.simplification();
+		std::cout << temp.ToString()<<std::endl;
+		std::string str = temp.get_variable_list().front();
+		if (temp.variable_count() == 1)
+		{
+			can_be_solved = true;
+			Fraction fra = Equation::solve(temp.ToString()+"=0").front();
+			result.insert({ str,fra});
+			trans_table.insert({ str,Polynomial(fra.ToString())});
+			continue;
+		}
+		trans_table.insert({ str,convert_single_to_polynomial(str,temp) });
+	}
+	if (can_be_solved == false)
+		throw std::runtime_error("sorry I can not solve the equation.");
+	for (iterator it=trans_table.begin();it!=trans_table.end();it++)
+	{
+		if (!it->second.isNumber())
+		{
+			Fraction tp = solve_driver(it->first, trans_table);
+			result.insert({ it->first, tp });
+			it->second = Polynomial(tp.ToString());
+		}
+	}
+	return result;
+}
+
+Polynomial Htto::Count::Equation2::convert_single_to_polynomial(const std::string & vname, const Polynomial & poly)
+{
+	Polynomial ret = poly;
+	std::cout << "ret dog:"+poly.ToString() << std::endl;
+	Fraction coef = ret.find(vname);
+	ret.remove_term(Monomial(vname));
+	ret = -ret;
+	ret = ret / Polynomial(coef.ToString());
+	ret.simplification();
+	return ret;
+}
+
+Fraction Htto::Count::Equation2::solve_driver(std::string v, const std::map<std::string, Polynomial> &table)
+{
+	if (table.find(v) == table.end())
+		throw std::runtime_error("Equation2::<private>solve_driver: can not find specific variable");
+	std::map<std::string, Polynomial>::const_iterator it = table.find(v);
+	if (it->second.isNumber() == true)
+		return Fraction(it->second.ToString());
+	std::map<std::string, Fraction> valueTable;
+	std::list<std::string> name_table=it->second.get_variable_list();
+	for (const auto & a : name_table)
+	{
+		valueTable.insert({ a,solve_driver(a,table) });
+	}
+	return it->second.get_value(valueTable);
+}

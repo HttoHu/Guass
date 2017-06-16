@@ -27,11 +27,23 @@ int main()
 	try
 	{
 		Example::polynomial_counter();
-		//Example::simple_equation();
-		//std::cout << StringTools::convert_expression("-1");
-		/*Polynomial p2("x-1");
-		std::cout << (p1*p2).ToString();
-		*/
+		//std::cout << Count::Equation2::convert_single_to_polynomial("y", Count::SimpleCount::PolyCount("(2/3)y+(5/3)z-2")).ToString();
+	}
+	catch (std::exception & e)
+	{
+		std::cout << e.what();
+	}
+	std::cout << "\n\n======================================\n\n";
+	try
+	{
+		//std::cout << Count::Equation2::convert_single_to_polynomial("x", Polynomial("5x+y-3")).ToString();
+		//std::cout << (Polynomial("-y") - Polynomial("1/2") - Polynomial("4/5")).ToString();
+		map<std::string, Fraction> result;
+		result = Count::Equation2::solve({ "3x+y+z=3","x+y+2z=1","2x+y-z=3"});
+		for (map<std::string, Fraction>::iterator it = result.begin();it != result.end();it++)
+		{
+		std::cout << it->first << "=" << it->second.ToString() << std::endl;
+		}
 	}
 	catch (std::exception & e)
 	{

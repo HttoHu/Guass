@@ -611,11 +611,11 @@ Htto::Fraction::Fraction(Radical_Exp up, Radical_Exp under)
 }
 Htto::Fraction::Fraction(std::string str)
 {
-	//这是我以前的手法,分割字符大法然后针对各个情况进行分析,效率比较低bug比较多.Fraction很久之前就写的,修改起来很复杂.我现在只能确保它的正确性和稳定性.
-	if (str == "")
+	if (str[0] == '(')
 	{
-		throw std::runtime_error("Fraction cannot covert a empty str.");
+		str = str.substr(1, str.size() - 2);
 	}
+	//这是我以前的手法,分割字符大法然后针对各个情况进行分析,效率比较低bug比较多.Fraction很久之前就写的,修改起来很复杂.我现在只能确保它的正确性和稳定性.
 	else if (str == "-")
 	{
 		m_molecular = Radical_Exp("-1");
@@ -834,7 +834,7 @@ string Htto::Fraction::ToString()const
 	{
 		return "-" + m_molecular.ToString();
 	}
-	return "(" + m_molecular.ToString() + '/' + m_denomilator.ToString() + ")";
+	return  "("+m_molecular.ToString() + '/' + m_denomilator.ToString()+")";
 }
 //===========================重载的运算符=================
 Fraction Htto::Fraction::operator+(const Fraction & op)const
@@ -919,6 +919,10 @@ Htto::Fraction::operator float()const
 }
 float Htto::Fraction::get_float_value()const
 {
+	if (m_molecular == Radical_Exp("0"))
+	{
+		return 0.0;
+	}
 	return (float)m_molecular / (float)m_denomilator;
 }
 

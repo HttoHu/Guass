@@ -23,6 +23,7 @@ namespace Htto
 		Monomial() = default;
 		Monomial(std::string str);
 		Monomial(const Monomial& M) :variableTable(M.variableTable), coef(M.coef) {}
+		Monomial(Monomial && m)noexcept { coef = m.coef;variableTable = m.variableTable; }
 		Monomial & operator=(const Monomial & M)
 		{
 			variableTable = M.variableTable;
@@ -36,13 +37,17 @@ namespace Htto
 		bool operator < (const Monomial & M)const;
 		bool operator >(const Monomial & M)const;
 		std::string ToString()const;
+		//the difference between name and ID:
+		//name return times,but ID not
 		std::string name()const;
+		std::string ID()const;
 		static bool is_like_term(const Monomial &, const Monomial &);//判断是否是同类项
 		void simplifiction();
 		Fraction get_coef()const
 		{
 			return coef;
 		}
+		Fraction get_value(const std::map<std::string, Fraction> & vtable)const;
 		Fraction times()const;
 #ifdef CONSOLE_DEBUG
 		std::map<std::string, Fraction>  debug()const;

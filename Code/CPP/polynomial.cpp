@@ -36,7 +36,7 @@ Htto::Polynomial::Polynomial(std::string str)
 	}
 }
 
-void Htto::Polynomial::simplification()
+void Htto::Polynomial::simplification()const
 {
 	sort();
 	if (data.size() < 2)
@@ -54,7 +54,7 @@ void Htto::Polynomial::simplification()
 			index2--;
 			index1 = index2;
 		}
-		if (index2 == data.size()-1)
+		if (index2 == (data.size()-1))
 		{
 			break;
 		}
@@ -64,13 +64,23 @@ void Htto::Polynomial::simplification()
 
 std::string Htto::Polynomial::ToString()const
 {
+	if (data.size() == 0)
+		return "0";
+	else if (data.size() == 1 && data.front().get_coef() == Fraction(0))
+		return "0";
 	get_rid_of_zero_monomial();
 	std::string ret;
 	for (size_t i=0;i<data.size();i++)
 	{
-		if (i != 0 && data[i].coef > Fraction("0"))
+		if (i != 0)
 		{
-			ret += "+";
+			if (data[i].coef < Fraction(0))
+			{
+				data[i] = -data[i];
+				ret += '-';
+			}
+			else
+				ret += "+";
 		}
 		ret += data[i].ToString();
 	}
@@ -110,7 +120,7 @@ Fraction Htto::Polynomial::max_times()
 	return thisMax;
 }
 
-void Htto::Polynomial::sort()
+void Htto::Polynomial::sort()const
 {
 	size_t j, p;
 	Monomial tmp;
@@ -134,17 +144,13 @@ bool Htto::Polynomial::operator==(Polynomial  poly) const
 
 void Htto::Polynomial::get_rid_of_zero_monomial()const
 {
-	using iterator = std::vector<Htto::Monomial>::iterator;
-	for (iterator it = data.begin();it != data.end();)
+	for (size_t i = 0;i < data.size();i++)
 	{
-		iterator it2 = it;
-		if (it2->coef == Htto::Fraction("0"))
+		if (data[i].coef == Fraction(0))
 		{
-			it++;
-			data.erase(it2);
+			data.erase(data.begin() + i);
+			i--;
 		}
-		else
-			it++;
 	}
 }
 
@@ -175,6 +181,7 @@ Polynomial Htto::Polynomial::operator-(const Polynomial & poly)const
 	{
 		ret.data.push_back(a);
 	}
+
 	for (auto a : poly.data)
 	{
 		a.coef = -a.coef;
@@ -246,16 +253,55 @@ Polynomial & Htto::Polynomial::operator/=(const Polynomial &poly)
 	return *this;
 }
 
+void Htto::Polynomial::remove_term(const Monomial & mono)
+{
+	using iterator = std::vector<Monomial>::iterator;
+	for (size_t i = 0;i < data.size();i++)
+	{
+		if (data[i] == mono)
+		{
+			data.erase(data.begin()+i);
+		}
+	}
+}
+
+std::list<std::string> Htto::Polynomial::get_variable_list()const
+{
+	std::list<std::string> ret;
+	for (const auto & a : data)
+	{for (const auto & b : a.variableTable)
+	{ret.push_back(b.first);}}
+	return ret;
+}
+
+bool Htto::Polynomial::isNumber() const
+{
+	if (data.size() == 1)
+		if (data.front().variableTable.size() == 0)
+			return true;
+	return false;
+}
+
+Fraction Htto::Polynomial::get_value(const std::map<std::string, Fraction> & vtable)const
+{
+	Fraction ret;
+	for (const auto a : data)
+	{
+		ret = ret + a.get_value(vtable);
+	}
+	return ret;
+}
+
 Fraction Htto::Polynomial::find(std::string str)
 {
 	for (const auto & a : data)
 	{
-		if (a.name() == str)
+		if (a.ID() == str)
 		{
 			return a.get_coef();
 		}
 	}
-	throw std::runtime_error("Fraction::<public>find:    no found this term");
+	throw std::runtime_error("Polynomial::<public>find:    no found this term");
 }
 
 Polynomial Htto::operator-(Polynomial fra)

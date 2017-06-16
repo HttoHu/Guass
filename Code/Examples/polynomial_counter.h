@@ -22,6 +22,7 @@ namespace Example
 			try
 			{
 				ct.InfixToPostfix(Htto::Count::SimpleCount::PushToListP(str_input));
+				ct.debug();
 				std::cout << ct.Count().ToString() << std::endl;
 			}
 			catch (const std::exception&e)

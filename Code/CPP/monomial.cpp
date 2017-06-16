@@ -19,17 +19,15 @@ bool isNumebr(const std::string & str)
 
 Htto::Monomial::Monomial(std::string str)
 {
+	int old_state = 0;
 	int state = 0;
 	std::string front;
 	std::string tp_times;
 	std::string tp_name;
 	for (const auto & tp : str)
 	{
-		if (isdigit(tp))
-		{
-			;
-		}
-		else if (isalpha(tp))
+		old_state = state;
+		if (isalpha(tp))
 		{
 			if (tp_name != "")
 			{
@@ -64,6 +62,8 @@ Htto::Monomial::Monomial(std::string str)
 			tp_times += tp;
 			break;
 		case 10:
+			if (old_state == 0)
+				coef = Fraction(front);
 			tp_name += tp;
 			break;
 		default:
@@ -131,7 +131,11 @@ Monomial Htto::Monomial::operator/(const Monomial & M) const
 	Monomial ret;
 	if (coef == Fraction(0))
 	{
-		throw std::runtime_error("a Monomial try to divided by zero.");
+		return Monomial("0");
+	}
+	else if (M.coef == Fraction(0))
+	{
+		throw std::runtime_error("Monomial operator/ :try to over zero.");
 	}
 	ret.coef = coef*(M.coef.get_reciprocal());
 	ret.variableTable = variableTable;
@@ -231,6 +235,15 @@ std::string Htto::Monomial::name() const
 	return ret;
 }
 
+std::string Htto::Monomial::ID() const
+{
+	using const_iterator = std::map<std::string, Htto::Fraction>::const_iterator;
+	std::string ret;
+	for (const_iterator it = variableTable.cbegin();it != variableTable.cend();it++)
+		ret += it->first;
+	return ret;
+}
+
 bool Htto::Monomial::is_like_term(const Monomial & mono1, const Monomial & mono2)
 {
 	return mono1.variableTable == mono2.variableTable;
@@ -254,6 +267,19 @@ void Htto::Monomial::simplifiction()
 		else
 			it1 = ++it2;
 	}
+}
+
+Fraction Htto::Monomial::get_value(const std::map<std::string, Fraction> & vtable)const
+{
+	using const_iterator = std::map<string, Fraction>::const_iterator;
+	Fraction ret=coef;
+	for (const_iterator it = vtable.cbegin();it != vtable.cend();it++)
+	{
+		if (variableTable.find(it->first) == variableTable.end())
+			continue;
+		ret =ret*Handle::Pow(it->second,(int)variableTable.find(it->first)->second );
+	}
+	return ret;
 }
 
 Fraction Htto::Monomial::times()const

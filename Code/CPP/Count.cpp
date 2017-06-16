@@ -70,6 +70,12 @@ unit Push_unit(int & index, std::string input)
 	index++;
 	return ret;
 }
+Htto::Polynomial Htto::Count::SimpleCount::PolyCount(const std::string & str)
+{
+	UniversalCount<Polynomial> up;
+	up.InfixToPostfix(PushToListP(str));
+	return up.Count();
+}
 bool Htto::Count::SimpleCount::IsCountSign(char c)
 {
 	if (c == '(' || c == ')' || c == '+' || c == '-' || c == '*' || c == '/'||c=='^')
@@ -88,7 +94,11 @@ Htto::Count::ExpressionList<Htto::Polynomial> Htto::Count::SimpleCount::PushToLi
 	for (const auto & a : str)
 	{
 		old_state = state;
-		if (IsCountSign(a))
+		if(state==7)
+		{
+			;
+		}
+		else if (IsCountSign(a))
 		{
 			state = 2;
 		}
@@ -96,6 +106,10 @@ Htto::Count::ExpressionList<Htto::Polynomial> Htto::Count::SimpleCount::PushToLi
 			state = 0;
 		switch (state)
 		{
+		case 7:
+			str_temp += a;
+			state = 0;
+			break;
 		case 0:
 			str_temp += a;
 			break;
@@ -104,6 +118,12 @@ Htto::Count::ExpressionList<Htto::Polynomial> Htto::Count::SimpleCount::PushToLi
 			{
 				str_temp += a;
 				break;
+			}
+			else if (a == '/')
+			{
+				state = 7;
+				str_temp += a;
+				continue;
 			}
 			else if (a == '^'&&old_state == 0)
 			{
