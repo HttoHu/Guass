@@ -76,8 +76,7 @@ std::string Htto::Polynomial::ToString()const
 		{
 			if (data[i].coef < Fraction(0))
 			{
-				data[i] = -data[i];
-				ret += '-';
+				ret += (-data[i].coef).ToString();
 			}
 			else
 				ret += "+";

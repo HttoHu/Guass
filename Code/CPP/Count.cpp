@@ -78,7 +78,7 @@ Htto::Polynomial Htto::Count::SimpleCount::PolyCount(const std::string & str)
 }
 bool Htto::Count::SimpleCount::IsCountSign(char c)
 {
-	if (c == '(' || c == ')' || c == '+' || c == '-' || c == '*' || c == '/'||c=='^')
+	if (c == '(' || c == ')' || c == '+' || c == '-' || c == '*' || c == '/' || c == '^')
 		return true;
 	else
 		return false;
@@ -94,11 +94,7 @@ Htto::Count::ExpressionList<Htto::Polynomial> Htto::Count::SimpleCount::PushToLi
 	for (const auto & a : str)
 	{
 		old_state = state;
-		if(state==7)
-		{
-			;
-		}
-		else if (IsCountSign(a))
+		if (IsCountSign(a))
 		{
 			state = 2;
 		}
@@ -106,10 +102,6 @@ Htto::Count::ExpressionList<Htto::Polynomial> Htto::Count::SimpleCount::PushToLi
 			state = 0;
 		switch (state)
 		{
-		case 7:
-			str_temp += a;
-			state = 0;
-			break;
 		case 0:
 			str_temp += a;
 			break;
@@ -119,12 +111,6 @@ Htto::Count::ExpressionList<Htto::Polynomial> Htto::Count::SimpleCount::PushToLi
 				str_temp += a;
 				break;
 			}
-			else if (a == '/')
-			{
-				state = 7;
-				str_temp += a;
-				continue;
-			}
 			else if (a == '^'&&old_state == 0)
 			{
 				str_temp += a;
@@ -132,20 +118,21 @@ Htto::Count::ExpressionList<Htto::Polynomial> Htto::Count::SimpleCount::PushToLi
 			}
 			if (str_temp == "")
 			{
-				ret.push_back(Element<Polynomial>(std::string(1,a), false,get_priority(a)));
+				ret.push_back(Element<Polynomial>(std::string(1, a), false, get_priority(a)));
 				continue;
 			}
 			ret.push_back(Element<Polynomial>(str_temp, true));
 			str_temp = "";
-			ret.push_back(Element<Polynomial>(std::string(1,a),false,get_priority(a)));
+			ret.push_back(Element<Polynomial>(std::string(1, a), false, get_priority(a)));
 			break;
 		default:
 			break;
 		}
 		pos++;
 	}
-	if(str_temp!="")
+	if (str_temp != "")
 		ret.push_back(Element<Polynomial>(str_temp, true));
+	ret.debug();
 	return ret;
 }
 std::list <unit> SimpleCount::PushToListF(std::string input)
@@ -193,6 +180,8 @@ std::list<unit> SimpleCount::InfixToPostfix(std::list<unit>& ExpStream)
 			{
 				output.push_back(Stack.top());
 				Stack.pop();
+				output.push_back(index);
+				continue;
 			}
 			Stack.push(index);
 		}

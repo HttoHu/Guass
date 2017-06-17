@@ -175,26 +175,28 @@ namespace Htto
 			std::stack<Element<T>> Stack;
 			for (auto & index : ExpStream)
 			{
+				//当读入一个操作数时立即将他放到输出中.
 				if (index.priority == 0)
 				{
 					output.push_back(index);
+					continue;
 				}
-				else if (Stack.empty())
+				//如果见到左括号我们将其推倒栈中.
+				if (index.strData == "(")
 				{
 					Stack.push(index);
 				}
-				else if (index.strData == "(")
-				{
-					Stack.push(index);
-				}
+				//a+b*c+(d*e+f)*g
+				//如果见到右括号,那么就将栈元素弹出,将弹出的符号知道我们的左括号为止.
 				else if (index.strData == ")")
 				{
-					while (!Stack.empty() && Stack.top().strData != "(")
+					while (!Stack.empty()&&Stack.top().strData != "(")
 					{
+						std::cout << Stack.top().strData << std::endl;
 						output.push_back(Stack.top());
 						Stack.pop();
 					}
-					if (!Stack.empty())
+					if(!Stack.empty())
 						Stack.pop();
 				}
 				else

@@ -17,10 +17,11 @@ namespace Example
 				return;
 			}
 			//这一步很重要,可以转换表达式比如(x+1)(x-1) 这样的式子UniversalCount是无法识别的需要变为(x+1)*(x-1)
-			//警告:VS 2015 在debug模式下covert_expression函数会崩溃,具体原因不明请使用release模式.在Linux 下没有问题
+			//警告:VS 2015 在debug模式下convert_expression函数会崩溃,具体原因不明请使用release模式.在Linux 下没有问题
 			str_input = Htto::StringTools::convert_expression(str_input);
 			try
 			{
+				std::cout << str_input << std::endl;
 				ct.InfixToPostfix(Htto::Count::SimpleCount::PushToListP(str_input));
 				ct.debug();
 				std::cout << ct.Count().ToString() << std::endl;

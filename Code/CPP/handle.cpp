@@ -217,8 +217,52 @@ std::string Htto::StringTools::convert_expression(std::string str)
 	int index = 0;
 	int state = 0;
 	int old_state = 0;
+	/*
 	for (const auto & a : str)
 	{
+	old_state = state;
+	if (isdigit(a) || isalpha(a))
+	state = 1;
+	else if (a == '+' || a == '-')
+	state = 2;
+	else if (a == '(')
+	{
+	state = 3;
+	}
+	else if (a == ')')
+	state = 4;
+	else
+	state = 0;
+	switch (state)
+	{
+	case 1:
+	if (old_state == 4)
+	{
+	str.insert(index, "*");
+	index+=1;
+	}
+	break;
+	case 3:
+	if (old_state == 2 && index == 1)
+	{
+	str.insert(index, "1*");
+	index += 2;
+	}
+	else if (old_state == 1 || old_state == 4)
+	{
+	str.insert(index, "*");
+	index += 1;
+	}
+	break;
+	default:
+	break;
+	}
+	index++;
+	}
+	*/
+	for (size_t i = 0;i < str.size();i++)
+	{
+		char & a = str[i];
 		old_state = state;
 		if (isdigit(a) || isalpha(a))
 			state = 1;
@@ -229,27 +273,34 @@ std::string Htto::StringTools::convert_expression(std::string str)
 			state = 3;
 		}
 		else if (a == ')')
+		{
 			state = 4;
+		}
 		else
 			state = 0;
+		//(1/3)z-(3/4)y-3
+		//std::cout << "S" + state << "\nOLD" << old_state << std::endl;
 		switch (state)
 		{
 		case 1:
-			if (old_state == 4 )
-				str.insert(index, "*");
+			if (old_state == 4)
+			{
+				str.insert(i, "*");
+			}
 			break;
 		case 3:
 			if (old_state == 2 && index == 1)
 			{
-				str.insert(index, "1*");
+				str.insert(i, "1*");
 			}
-			if (old_state == 1 || old_state == 4)
-				str.insert(index, "*");
+			else if (old_state == 1 || old_state == 4)
+			{
+				str.insert(i, "*");
+			}
 			break;
 		default:
 			break;
 		}
-		index++;
 	}
 	return str;
 }
