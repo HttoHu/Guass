@@ -9,7 +9,6 @@ Htto::Polynomial::Polynomial(std::string str)
 		if (a=='+'||a=='-')
 		{
 			state = 1;
-
 		}
 		switch(state)
 		{
@@ -62,6 +61,20 @@ void Htto::Polynomial::simplification()const
 	}
 }
 
+Polynomial Htto::Polynomial::reciprocal() const
+{
+	Polynomial ret=*this;
+	for (auto & a : ret.data)
+	{
+		a.coef.reciprocal();
+		for (auto & b : a.variableTable)
+		{
+			b.second = -b.second;
+		}
+	}
+	return ret;
+}
+
 std::string Htto::Polynomial::ToString()const
 {
 	if (data.size() == 0)
@@ -76,7 +89,8 @@ std::string Htto::Polynomial::ToString()const
 		{
 			if (data[i].coef < Fraction(0))
 			{
-				ret += (-data[i].coef).ToString();
+				ret += "-"+(-data[i]).ToString();
+				continue;
 			}
 			else
 				ret += "+";
@@ -86,12 +100,12 @@ std::string Htto::Polynomial::ToString()const
 	return ret;
 }
 
-std::size_t Htto::Polynomial::term_count()
+std::size_t Htto::Polynomial::term_count()const
 {
 	return data.size();
 }
 
-std::size_t Htto::Polynomial::variable_count()
+std::size_t Htto::Polynomial::variable_count()const
 {
 	std::set<std::string> variable_table;
 	for (const auto & a : data)
@@ -108,7 +122,7 @@ std::size_t Htto::Polynomial::variable_count()
 	return variable_table.size();
 }
 
-Fraction Htto::Polynomial::max_times()
+Fraction Htto::Polynomial::max_times()const
 {
 	Fraction thisMax(0);
 	for (const auto & a : data)
@@ -206,15 +220,30 @@ Polynomial Htto::Polynomial::operator*(const Polynomial & poly)const
 
 Polynomial Htto::Polynomial::operator/(const Polynomial & poly)const
 {
+	/*
+
 	Polynomial ret;
-	for (size_t i = 0;i < poly.data.size();i++)
+	if (isSingle() && poly.isSingle())
 	{
-		for (size_t j = 0;j < data.size();j++)
+		if (isSingle())
 		{
-			ret.data.push_back(data[j]/poly.data[i]);
+			for (const auto & a : poly.data)
+			{
+				ret = ret + Polynomial((data.front() / a).ToString());
+			}
+		}
+		else
+		{
+			for (const auto & a : data)
+			{
+				ret = ret + Polynomial((a / ret.data.front()).ToString());
+			}
 		}
 	}
-	return ret;
+	else
+		throw std::runtime_error("Polynomial operator/ :can not count");
+	return ret;*/
+	return poly.reciprocal()*(*this);
 }
 
 Polynomial & Htto::Polynomial::operator+=(const Polynomial & poly)

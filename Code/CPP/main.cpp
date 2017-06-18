@@ -26,8 +26,7 @@ int main()
 	start = clock();
 	try
 	{
-		Example::polynomial_counter();
-		//std::cout << Count::Equation2::convert_single_to_polynomial("y", Count::SimpleCount::PolyCount("(2/3)y+(5/3)z-2")).ToString();
+		//Example::polynomial_counter();
 	}
 	catch (std::exception & e)
 	{
@@ -36,13 +35,12 @@ int main()
 	std::cout << "\n\n======================================\n\n";
 	try
 	{
-		//std::cout << Count::Equation2::convert_single_to_polynomial("x", Polynomial("5x+y-3")).ToString();
-		//std::cout << (Polynomial("-y") - Polynomial("1/2") - Polynomial("4/5")).ToString();
 		map<std::string, Fraction> result;
-		result = Count::Equation2::solve({ "3x+y+z=3","x+y+2z=1","2x+y-z=3"});
+		result = Count::Equation2::solve({ "x+y+z=3","x-y+z=5","x+4z=4"});
+		//result = Count::Equation2::solve({"2x+2y+3z+4t=5","6x-5y+8z+9t=10","11x+12y+13z+14t=5","16x+17y+18z+19t=20"});
 		for (map<std::string, Fraction>::iterator it = result.begin();it != result.end();it++)
 		{
-		std::cout << it->first << "=" << it->second.ToString() << std::endl;
+			std::cout << it->first << "=" << it->second.ToString() << std::endl;
 		}
 	}
 	catch (std::exception & e)

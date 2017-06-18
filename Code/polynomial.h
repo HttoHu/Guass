@@ -19,10 +19,11 @@ namespace Htto
 		Polynomial(const Polynomial & poly) :data(poly.data) {}
 		Polynomial(Polynomial && poly)noexcept { data = poly.data; }
 		void simplification()const;
+		Polynomial reciprocal()const;
 		std::string ToString()const;
-		std::size_t  term_count();
-		std::size_t variable_count();
-		Fraction max_times();
+		std::size_t  term_count()const;
+		std::size_t variable_count()const;
+		Fraction max_times()const;
 		void sort()const;
 		bool operator==(const Polynomial )const;
 		Polynomial & operator =(const Polynomial &) = default;
@@ -35,6 +36,7 @@ namespace Htto
 		Polynomial& operator *=(const Polynomial &);
 		Polynomial& operator /=(const Polynomial &);
 		//输入变量找系数
+		bool isSingle()const { return term_count() == 1; }
 		void remove_term(const Monomial & mono);
 		std::list<std::string> get_variable_list()const;
 		bool isNumber()const;

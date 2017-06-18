@@ -4,21 +4,6 @@
 #include <string>
 namespace Htto
 {
-	namespace details
-	{
-		struct HasMemberToStringValidator
-		{
-			template <typename T, typename = decltype(&T::simplification)>
-			static std::true_type Test(int);
-
-			template <typename>
-			static std::false_type Test(...);
-		};
-	}
-	template <typename T>
-	struct HasMemberToString :
-		public decltype(details::HasMemberToStringValidator::Test<T>(0))
-	{};
 	class Handle
 	{
 	public:

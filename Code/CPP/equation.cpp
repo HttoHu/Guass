@@ -77,11 +77,11 @@ std::map<std::string, Fraction> Htto::Count::Equation2::solve(const std::vector<
 	{
 		for (iterator it = trans_table.begin();it != trans_table.end();it++)
 		{
-			a = Htto::StringTools::string_replace(a, it->first, it->second.ToString());
+			a = Htto::StringTools::string_replace(a, it->first, "("+it->second.ToString()+")");
 		}
 		temp = get_polynomial(a);
 		temp.simplification();
-		std::cout << temp.ToString()<<std::endl;
+		temp.get_rid_of_zero_monomial();
 		std::string str = temp.get_variable_list().front();
 		if (temp.variable_count() == 1)
 		{
@@ -110,8 +110,7 @@ std::map<std::string, Fraction> Htto::Count::Equation2::solve(const std::vector<
 Polynomial Htto::Count::Equation2::convert_single_to_polynomial(const std::string & vname, const Polynomial & poly)
 {
 	Polynomial ret = poly;
-	std::cout << "ret dog:"+poly.ToString() << std::endl;
-	Fraction coef = ret.find(vname);
+	Fraction coef=ret.find(vname);
 	ret.remove_term(Monomial(vname));
 	ret = -ret;
 	ret = ret / Polynomial(coef.ToString());

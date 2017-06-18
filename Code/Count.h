@@ -192,7 +192,6 @@ namespace Htto
 				{
 					while (!Stack.empty()&&Stack.top().strData != "(")
 					{
-						std::cout << Stack.top().strData << std::endl;
 						output.push_back(Stack.top());
 						Stack.pop();
 					}

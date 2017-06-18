@@ -73,7 +73,8 @@ unit Push_unit(int & index, std::string input)
 Htto::Polynomial Htto::Count::SimpleCount::PolyCount(const std::string & str)
 {
 	UniversalCount<Polynomial> up;
-	up.InfixToPostfix(PushToListP(str));
+	std::string str2= StringTools::convert_expression(str);
+	up.InfixToPostfix(PushToListP(str2));
 	return up.Count();
 }
 bool Htto::Count::SimpleCount::IsCountSign(char c)
@@ -87,14 +88,14 @@ Htto::Count::ExpressionList<Htto::Polynomial> Htto::Count::SimpleCount::PushToLi
 {
 	int state = 0;
 	int old_state = 0;
-	int pos = 0;
+	char lastChar;
 	ExpressionList<Htto::Polynomial> ret;
 	Polynomial poly_temp;
 	std::string str_temp;
-	for (const auto & a : str)
+	for (int i=0;i<str.size();i++)
 	{
 		old_state = state;
-		if (IsCountSign(a))
+		if (IsCountSign(str[i]))
 		{
 			state = 2;
 		}
@@ -103,36 +104,35 @@ Htto::Count::ExpressionList<Htto::Polynomial> Htto::Count::SimpleCount::PushToLi
 		switch (state)
 		{
 		case 0:
-			str_temp += a;
+			str_temp += str[i];
 			break;
 		case 2:
-			if ((a == '+' || a == '-') && (pos == 0 || (str_temp == ""&&str[pos] == '(')))
+			if ((str[i] == '+' || str[i] == '-')&&(i==0||str[i-1]=='('))
 			{
-				str_temp += a;
+				str_temp += str[i];
 				break;
 			}
-			else if (a == '^'&&old_state == 0)
+			else if (str[i] == '^'&&old_state == 0)
 			{
-				str_temp += a;
+				str_temp += str[i];
 				break;
 			}
 			if (str_temp == "")
 			{
-				ret.push_back(Element<Polynomial>(std::string(1, a), false, get_priority(a)));
+				ret.push_back(Element<Polynomial>(std::string(1, str[i]), false, get_priority(str[i])));
+				//pos++;
 				continue;
 			}
 			ret.push_back(Element<Polynomial>(str_temp, true));
 			str_temp = "";
-			ret.push_back(Element<Polynomial>(std::string(1, a), false, get_priority(a)));
+			ret.push_back(Element<Polynomial>(std::string(1, str[i]), false, get_priority(str[i])));
 			break;
 		default:
 			break;
 		}
-		pos++;
 	}
 	if (str_temp != "")
 		ret.push_back(Element<Polynomial>(str_temp, true));
-	ret.debug();
 	return ret;
 }
 std::list <unit> SimpleCount::PushToListF(std::string input)

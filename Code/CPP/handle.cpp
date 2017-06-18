@@ -289,7 +289,7 @@ std::string Htto::StringTools::convert_expression(std::string str)
 			}
 			break;
 		case 3:
-			if (old_state == 2 && index == 1)
+			if (old_state == 2 /*&& index == 1*/)
 			{
 				str.insert(i, "1*");
 			}
