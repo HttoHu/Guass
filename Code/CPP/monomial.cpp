@@ -225,6 +225,21 @@ std::string Htto::Monomial::ToString()const
 	return ret;
 }
 
+bool Htto::Monomial::is_square()const
+{
+	using const_iterator = std::map<std::string, Fraction>::const_iterator;
+	if (!coef.is_square())
+	{
+		return false;
+	}
+	for (const_iterator it = variableTable.begin();it != variableTable.end();it++)
+	{
+		if (((int)it->second%2))
+			return false;
+	}
+	return true;
+}
+
 std::string Htto::Monomial::name() const
 {
 	string ret;
@@ -269,6 +284,16 @@ void Htto::Monomial::simplifiction()
 	}
 }
 
+Monomial Htto::Monomial::get_numsqrt() const
+{
+	using const_iterator = std::map<std::string, Fraction>::const_iterator;
+	Monomial ret;
+	ret.coef = coef.get_sqrt_value();
+	for (const_iterator it = variableTable.begin();it != variableTable.end();it++)
+		ret.variableTable.insert({ it->first,it->second / Fraction(2) });
+	return ret;
+}
+
 Fraction Htto::Monomial::get_value(const std::map<std::string, Fraction> & vtable)const
 {
 	using const_iterator = std::map<string, Fraction>::const_iterator;
@@ -277,7 +302,7 @@ Fraction Htto::Monomial::get_value(const std::map<std::string, Fraction> & vtabl
 	{
 		if (variableTable.find(it->first) == variableTable.end())
 			continue;
-		ret =ret*Handle::Pow(it->second,(int)variableTable.find(it->first)->second );
+		ret =ret*SimpleAlgorithm::Pow(it->second,(int)variableTable.find(it->first)->second );
 	}
 	return ret;
 }

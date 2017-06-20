@@ -2,7 +2,6 @@
 #define BALANCESTACK_H_
 #include "Count.h"
 #include <stack>
-#include "handle.h"
 namespace Htto
 {
 	class BalanceStack

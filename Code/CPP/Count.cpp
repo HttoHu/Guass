@@ -252,7 +252,7 @@ Htto::Fraction SimpleCount::GetCountResult(const std::list<unit>& exp)
 				Stack.pop();
 				tp1 = Stack.top();
 				Stack.pop();
-				tp1 = Htto::Handle::Pow(tp1, tp3);
+				tp1 = Htto::SimpleAlgorithm::Pow(tp1, tp3);
 				Stack.push(tp1);
 			}
 		}

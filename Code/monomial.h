@@ -10,11 +10,16 @@
 #include <map>
 namespace Htto
 {
+	namespace Count
+	{
+		class factorization;
+	}
 	class Polynomial;
 	class Monomial
 	{
 	private:
 		friend class Polynomial;
+		friend class Count::factorization;
 		friend Polynomial operator-(Polynomial  fra);
 		friend Monomial operator-(Monomial  fra);
 		Fraction coef;//系数
@@ -37,12 +42,14 @@ namespace Htto
 		bool operator < (const Monomial & M)const;
 		bool operator >(const Monomial & M)const;
 		std::string ToString()const;
+		bool is_square()const;
 		//the difference between name and ID:
 		//name return times,but ID not
 		std::string name()const;
 		std::string ID()const;
 		static bool is_like_term(const Monomial &, const Monomial &);//判断是否是同类项
 		void simplifiction();
+		Monomial get_numsqrt()const;
 		Fraction get_coef()const
 		{
 			return coef;

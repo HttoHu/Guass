@@ -3,14 +3,20 @@
 #include <vector>
 #include <set>
 #include <algorithm>
+#include <initializer_list>
 #define CONSOLE_DEBUG
 namespace Htto
 {
+	namespace Count
+	{
+		class factorization;
+	}
 	//多项式类
 	//请注意，多项式类除法(operator/)是有问题的（算法上的问题）。我花了2个小时尝试解决它，但是我失败了。但我发现了fraction的bug。抱歉精力有限，现在请不要使用.
 	//除以一个单项式是没有问题的。我将写一个分式类来处理除法问题。
 	class Polynomial
 	{
+		friend class Count::factorization;
 		friend Polynomial operator-(Polynomial  fra);
 		friend class Equation2;
 	public:
@@ -18,6 +24,10 @@ namespace Htto
 		Polynomial(std::string str);
 		Polynomial(const Polynomial & poly) :data(poly.data) {}
 		Polynomial(Polynomial && poly)noexcept { data = poly.data; }
+		Polynomial(const std::initializer_list<Monomial> & ms)
+		{
+			data = ms;
+		}
 		void simplification()const;
 		Polynomial reciprocal()const;
 		std::string ToString()const;

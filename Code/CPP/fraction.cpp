@@ -114,9 +114,14 @@ std::string Htto::Radical_Exp::ToString()const
 	}
 
 }
-void Htto::Radical_Exp::numsqrt()
+float Htto::Radical_Exp::get_numsqrt() const
 {
-
+	float ret=0.0;
+	for (const auto & a : ExpVec)
+	{
+		ret += a.get_numsqrt();
+	}
+	return ret;
 }
 void Htto::Radical_Exp::reset(string str)
 {
@@ -247,7 +252,7 @@ int Htto::Radical_Exp::GetMaxGCD()
 	int maxGcd = ExpVec[0].outNumber;
 	for (unsigned int i = 1;i < ExpVec.size();i++)
 	{
-		maxGcd = Handle::INT_GCD(maxGcd, ExpVec[i].outNumber);
+		maxGcd = SimpleAlgorithm::INT_GCD(maxGcd, ExpVec[i].outNumber);
 	}
 	if (maxGcd < 0)
 		return -maxGcd;
@@ -392,6 +397,10 @@ void Htto::Radical_Number::Simplifaction()
 	}
 	outNumber *= (int)sqrt(tempNumber);
 	inNumber /= tempNumber;
+}
+float Htto::Radical_Number::get_numsqrt()const
+{
+	return outNumber*sqrt(inNumber);
 }
 void Htto::Radical_Number::numsqrt()
 {
@@ -635,7 +644,7 @@ Htto::Fraction::Fraction(std::string str)
 		int tenV = 1;
 		while (1)
 		{
-			if (Handle::isEqual(test, fla))
+			if (SimpleAlgorithm::isEqual(test, fla))
 			{
 				m_molecular = Radical_Exp(std::to_string(test));
 				m_denomilator = Radical_Exp(std::to_string(tenV));
@@ -691,7 +700,7 @@ Htto::Fraction::Fraction(float fla)
 	int tenV = 1;
 	while (1)
 	{
-		if (Handle::isEqual(test, fla))
+		if (SimpleAlgorithm::isEqual(test, fla))
 		{
 			m_molecular = Radical_Exp(std::to_string(test));
 			m_denomilator = Radical_Exp(std::to_string(tenV));
@@ -726,7 +735,7 @@ Fraction Htto::Fraction::pow(int times)
 	}
 	Fraction temp = *this;
 	Fraction temp2=temp;
-	int index = Handle::ABS(times);
+	int index = SimpleAlgorithm::ABS(times);
 	for (int i = 1;i < index;i++)
 	{
 		temp = temp2*temp;
@@ -738,15 +747,18 @@ Fraction Htto::Fraction::pow(int times)
 	else
 		return temp;
 }
-Fraction Htto::Fraction::get_sqrt_value()
+Fraction Htto::Fraction::get_sqrt_value()const
 {
 	Fraction ret = *this;
 	ret.numsqrt();
+	ret.simplification();
 	return ret;
 }
 void Htto::Fraction::numsqrt()
 {
 	simplification();
+	if ((int)(*this) < 0)
+		throw std::runtime_error("try to sqrt a negetive fraction.");
 	if (m_molecular.ExpVec.size() > 2 || m_denomilator.ExpVec.size() > 2)
 	{
 		return;
@@ -794,7 +806,7 @@ void Htto::Fraction::simplification()
 	}
 	m_molecular.Simplifaction();
 	m_denomilator.Simplifaction();
-	int maxGCD = Handle::INT_GCD(m_molecular.GetMaxGCD(), m_denomilator.GetMaxGCD());
+	int maxGCD = SimpleAlgorithm::INT_GCD(m_molecular.GetMaxGCD(), m_denomilator.GetMaxGCD());
 	m_molecular.reduceByNumber(maxGCD);
 	m_denomilator.reduceByNumber(maxGCD);
 }
@@ -835,6 +847,18 @@ string Htto::Fraction::ToString()const
 		return "-" + m_molecular.ToString();
 	}
 	return  "("+m_molecular.ToString() + '/' + m_denomilator.ToString()+")";
+}
+bool Htto::Fraction::is_interger() const
+{
+	return float(*this) == (int)(*this);
+}
+bool Htto::Fraction::is_square()const
+{
+	if (std::sqrt((int)*this) == std::sqrt((float)*this))
+	{
+		return true;
+	}
+	return false;
 }
 //===========================÷ÿ‘ÿµƒ‘ÀÀ„∑˚=================
 Fraction Htto::Fraction::operator+(const Fraction & op)const

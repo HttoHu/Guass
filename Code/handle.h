@@ -1,21 +1,23 @@
 #pragma once
-#ifndef HANDLE_H
-#define HANDLE_H
+#ifndef SimpleAlgorithm_H
+#define SimpleAlgorithm_H
 #include <string>
+#include "fraction.h"
 namespace Htto
 {
-	class Handle
+	namespace SimpleAlgorithm
 	{
-	public:
-		static int INT_GCD(int n, int m);//获得公因数
-		static int INT_MAX_FACTOR(int n);//获得最大的平方公因数
-		template<typename T>static T ABS(T a) { if (a > 0) { return a; } else return -a; }//求绝对值
+		template<typename T>
+		T get_min(const T & t1, const T & t2) { if (t1 < t2)return t1;else return t2; }
+		int INT_GCD(int n, int m);//获得公因数
+		int INT_MAX_FACTOR(int n);//获得最大的平方公因数
+		template<typename T>static T ABS(T a) { if (a > T("0")) return a;  else return -a; }//求绝对值
 		//T 仅限用于我自己写的类.
 		template<typename T>static T Pow(const T&  rhs, int lhs)
 		{
 			T ret = rhs;
-			bool isN=false;
-			if (lhs ==0)
+			bool isN = false;
+			if (lhs == 0)
 				return T("0");
 			else if (lhs <= 0)
 			{
@@ -28,11 +30,12 @@ namespace Htto
 				ret.simplification();
 			}
 			if (isN)
-				return (T("1")/ ret);
+				return (T("1") / ret);
 			return ret;
 		}//求绝对值
-		static bool isEqual(int n, float f);
+		bool isEqual(int n, float f);
 	};
+
 	class StringTools
 	{
 	public:

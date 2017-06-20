@@ -1,8 +1,10 @@
-#include "../handle.h"
+//基本数值处理和字符处理
+#include "../Handle.h"
 #include <iostream>
 #include <cctype>
 //获得最大公因数
-int Htto::Handle::INT_GCD(int n, int m)
+using namespace Htto;
+int Htto::SimpleAlgorithm::INT_GCD(int n, int m)
 {
 	if (n < m)
 	{
@@ -22,7 +24,7 @@ int Htto::Handle::INT_GCD(int n, int m)
 	return m;
 }
 //获得最大因子(未优化)
-int Htto::Handle::INT_MAX_FACTOR(int n)
+int Htto::SimpleAlgorithm::INT_MAX_FACTOR(int n)
 {
 	if (n < 1)
 		return 1;
@@ -34,7 +36,7 @@ int Htto::Handle::INT_MAX_FACTOR(int n)
 	}
 	return 1;
 }
-bool Htto::Handle::isEqual(int n, float f)
+bool Htto::SimpleAlgorithm::isEqual(int n, float f)
 {
 	if ((float)n == f)
 		return true;

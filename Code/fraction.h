@@ -1,5 +1,5 @@
 #pragma once
-#include "handle.h"
+#include "Handle.h"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -22,6 +22,7 @@ namespace Htto
 
 		Radical_Number(int num) { Radical_Number(num, 1); };
 		void Simplifaction();//化简
+		float get_numsqrt()const;
 		void numsqrt();//开方
 		std::string ToString()const;//输出string
 #ifdef DEBUG
@@ -59,8 +60,7 @@ namespace Htto
 		Radical_Exp(std::string str);
 		Radical_Exp(std::initializer_list<Radical_Number> RNL) { for (auto  au : RNL) { ExpVec.push_back(au); } }
 		std::string ToString()const;
-		//尚未完成
-		void numsqrt();
+		float get_numsqrt()const;
 		void reset(std::string str);
 		void Simplifaction();
 		void reduceByNumber(int num);
@@ -98,12 +98,15 @@ namespace Htto
 		Fraction& operator= (const Fraction & fra);
 		//======================常用操作====================
 		Fraction pow(int times);//计算这个的times次方
-		Fraction get_sqrt_value();
-		void numsqrt();//平方.
+		Fraction get_sqrt_value()const;
+		void numsqrt();//开方.
 		void simplification();//化简
 		void reciprocal();//取倒数
 		Fraction get_reciprocal()const;//记住这个函数性能可以更好。
 		std::string ToString()const;//换为String
+		bool is_interger()const;
+	    bool is_square()const;
+		float get_float_value()const;
 		//=================operator=========================
 		Fraction operator+(const Fraction & op)const;
 		Fraction& operator+=(const Fraction & op);
@@ -117,6 +120,5 @@ namespace Htto
 		bool operator<=(const Fraction & op)const;
 		bool operator>=(const Fraction & op)const;
 		operator float()const;
-		float get_float_value()const;
 	};
 }
