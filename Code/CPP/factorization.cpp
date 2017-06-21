@@ -9,7 +9,8 @@ std::vector<Polynomial> Htto::Count::factorization::factoring(Polynomial poly)
 	{
 		m_factor = get_public_factor(m_factor, a);
 	}
-	ret.push_back(Polynomial({ m_factor }));
+	if(m_factor!=Monomial("1"))
+		ret.push_back(Polynomial({ m_factor }));
 	poly /= Polynomial({ m_factor });
 	if (poly.term_count() == 3)
 	{
@@ -21,8 +22,9 @@ std::vector<Polynomial> Htto::Count::factorization::factoring(Polynomial poly)
 				return true; 
 			else return false;
 		});
-		if (poly.max_times() == Fraction(2))
+		if (true)
 		{
+			bool isN=false;
 			std::vector<Monomial> vec;
 			for (const auto & a : poly.data)
 			{
@@ -30,10 +32,13 @@ std::vector<Polynomial> Htto::Count::factorization::factoring(Polynomial poly)
 				{
 					vec.push_back(a);
 				}
+				else
+				{
+					if (a < Monomial("0"))
+						isN = true;
+				}
 			}
-			if (vec.size() < 2)
-				;
-			else
+			if (vec.size() >= 2)
 			{
 				Monomial m3("1");
 				for (const auto & a : vec)
@@ -43,28 +48,48 @@ std::vector<Polynomial> Htto::Count::factorization::factoring(Polynomial poly)
 				m3 = m3*Monomial("2");
 				if (std::find(poly.data.cbegin(), poly.data.cend(), m3)!=poly.data.cend())
 				{
-					ret.push_back({ vec[0].get_numsqrt(),vec[1].get_numsqrt() });
-					ret.push_back({ vec[0].get_numsqrt(),vec[1].get_numsqrt() });
+					Polynomial p1({ vec[0].get_numsqrt(),vec[1].get_numsqrt() });
+					if (isN)
+						p1.data[1] = -p1.data[1];
+					std::vector<Polynomial> n_vec = factoring(p1);
+					if (n_vec.size() == 1)
+					{
+						ret.push_back(p1);
+						ret.push_back(p1);
+					}
+					else
+						for (const auto & a : n_vec)
+						{
+							ret.push_back(a);
+							ret.push_back(a);
+						}
+					poly = Polynomial("");
 				}
 			}
 		}
-
 	}
 	else
 	{
 		if (poly.term_count() == 2)
 		{
 			std::sort(poly.data.begin(), poly.data.end(), [](const Monomial & m1, const Monomial & m2) {return m1.get_coef() > m2.get_coef();});
-			if (poly.data[1].coef < Fraction(0) && poly.data[0].is_square() && (-poly.data[1]).is_square())
+			if (poly.data[1].coef < Fraction(0) && poly.data[0].is_square() && (-poly.data[1]).is_square()&& (int)poly.data[0].coef > 0)
 			{
-				if ((int)poly.data[0].coef > 0)
-				{
-					ret.push_back({ poly.data[0].get_numsqrt(),(-poly.data[1]).get_numsqrt() });
-					ret.push_back({ poly.data[0].get_numsqrt(),-(-poly.data[1]).get_numsqrt() });
-				}
+				Polynomial p1({ poly.data[0].get_numsqrt(),(-poly.data[1]).get_numsqrt() });
+				Polynomial p2({ poly.data[0].get_numsqrt(),-(-poly.data[1]).get_numsqrt() });
+				std::vector<Polynomial> n_vec = factoring(p1);
+				std::vector<Polynomial> m_vec = factoring(p2);
+				for (const auto & a : n_vec)
+					ret.push_back(a);
+				for (const auto & b : m_vec)
+					ret.push_back(b);
+				poly = Polynomial("1");
 			}
 		}
 	}
+	if(poly!=Polynomial("0"))
+		ret.push_back(poly);
+	get_rid_of_terms(ret);
 	return ret;
 }
 Monomial Htto::Count::factorization::get_public_factor(const Monomial & m1, const Monomial & m2)
@@ -85,4 +110,29 @@ Monomial Htto::Count::factorization::get_public_factor(const Monomial & m1, cons
 		}
 	}
 	return ret;
+}
+void Htto::Count::factorization::get_rid_of_terms(std::vector<Polynomial>& vec)
+{
+	bool isN = false;
+	for (size_t i = 0;i < vec.size();i++)
+	{
+		if (vec[i] == Polynomial("1"))
+		{
+			vec.erase(vec.begin() + i);
+			i--;
+			continue;
+		}
+		if (vec[i] == Polynomial("-1"))
+		{
+			vec.erase(vec.begin() + i);
+			i--;
+			isN = !isN;
+			continue;
+		}
+		if (isN)
+		{
+			vec.push_back(Polynomial("-1"));
+			std::swap(vec.begin(), vec.end());
+		}
+	}
 }

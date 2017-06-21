@@ -21,10 +21,8 @@ namespace Example
 			str_input = Htto::StringTools::convert_expression(str_input);
 			try
 			{
-				std::cout << str_input << std::endl;
 				ct.InfixToPostfix(Htto::Count::SimpleCount::PushToListP(str_input));
-				ct.debug();
-				std::cout << ct.Count().ToString() << std::endl;
+				std::cout << "="+ct.Count().ToString() << std::endl;
 			}
 			catch (const std::exception&e)
 			{
@@ -56,6 +54,28 @@ namespace Example
 				index++;
 			}
 			std::cout << std::endl;
+		}
+	}
+	//多元方程
+	inline void polyv_equation()
+	{
+		std::cout << "mutiple variable equation 1.0\nby Htto 2017\n";
+		std::vector<std::string> input;
+		std::map<std::string,Htto::Fraction> result;
+		std::string str_temp;
+		while (1)
+		{
+			std::cin >> str_temp;
+			if (str_temp == "#")
+			{
+				result = Htto::Count::Equation2::solve(input);
+				break;
+			}
+			input.push_back(str_temp);
+		}
+		for (std::map<std::string, Htto::Fraction>::const_iterator it = result.begin();it != result.end();it++)
+		{
+			std::cout << it->first << "=" << it->second.ToString()<<std::endl;
 		}
 	}
 }

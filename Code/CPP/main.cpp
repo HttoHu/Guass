@@ -20,12 +20,7 @@ int main()
 	start = clock();
 	try
 	{
-		//std::cout << Monomial("4y^6x^7").get_numsqrt().ToString();
-		for (const auto & a : Count::factorization::factoring(std::string("x^2+2x+1")))
-		{
-			std::cout << "(" << a.ToString() + ")";
-		}
-		//std::cout<<Count::factorization::get_public_factor(Monomial("2"), Monomial("xy")).ToString();
+		Example::polyv_equation();
 	}
 	catch (std::exception & e)
 	{
@@ -34,6 +29,7 @@ int main()
 	std::cout << "\n\n======================================\n\n";
 	try
 	{
+		//Example::polynomial_counter();
 	}
 	catch (std::exception & e)
 	{
