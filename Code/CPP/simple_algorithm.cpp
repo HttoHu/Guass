@@ -1,5 +1,5 @@
 //基本数值处理和字符处理
-#include "../Handle.h"
+#include "../simple_algorithm.h"
 #include <iostream>
 #include <cctype>
 //获得最大公因数

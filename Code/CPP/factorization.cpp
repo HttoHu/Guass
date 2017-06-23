@@ -46,7 +46,7 @@ std::vector<Polynomial> Htto::Count::factorization::factoring(Polynomial poly)
 					m3 = m3*a.get_numsqrt();
 				}
 				m3 = m3*Monomial("2");
-				if (std::find(poly.data.cbegin(), poly.data.cend(), m3)!=poly.data.cend())
+				if (std::find_if(poly.data.cbegin(), poly.data.cend(), [m3](const Monomial &M) {if (m3==M&&m3.get_coef() == M.get_coef())return true; else return false;}) != poly.data.cend())
 				{
 					Polynomial p1({ vec[0].get_numsqrt(),vec[1].get_numsqrt() });
 					if (isN)
@@ -71,7 +71,8 @@ std::vector<Polynomial> Htto::Count::factorization::factoring(Polynomial poly)
 	else
 	{
 		if (poly.term_count() == 2)
-		{
+		{			//std::cout << poly.data[0].ToString() << std::endl;
+			//std::cout << poly.data[1].ToString() << std::endl;
 			std::sort(poly.data.begin(), poly.data.end(), [](const Monomial & m1, const Monomial & m2) {return m1.get_coef() > m2.get_coef();});
 			if (poly.data[1].coef < Fraction(0) && poly.data[0].is_square() && (-poly.data[1]).is_square()&& (int)poly.data[0].coef > 0)
 			{

@@ -142,11 +142,11 @@ void Htto::Radical_Exp::reset(string str)
 		ExpVec.push_back(Transform);
 	}
 }
-void Htto::Radical_Exp::Simplifaction()
+void Htto::Radical_Exp::simplifaction()
 {
 	for (auto & au : ExpVec)
 	{
-		au.Simplifaction();
+		au.simplifaction();
 	}
 	std::sort(ExpVec.begin(), ExpVec.end(), [](Radical_Number rn, Radical_Number rn2) {return rn.inNum() > rn2.inNum();});
 	vector <Radical_Number>newRNVec;
@@ -195,7 +195,7 @@ bool Htto::Radical_Exp::isSingle()
 }
 bool Htto::Radical_Exp::isNature()
 {
-	Simplifaction();
+	simplifaction();
 	if (!isSingle())
 		return false;
 	if (ExpVec[0].inNum() == 1)
@@ -216,7 +216,7 @@ Htto::Radical_Exp Htto::Radical_Exp::operator+ (Radical_Exp Exp)const
 	{
 		tp.ExpVec.push_back(auo);
 	}
-	tp.Simplifaction();
+	tp.simplifaction();
 	return tp;
 }
 Radical_Exp Htto::Radical_Exp::operator-(Radical_Exp Exp)const
@@ -234,7 +234,7 @@ Radical_Exp Htto::Radical_Exp::operator*(Radical_Exp op)const
 		newRE = op*au;
 		ret = ret + newRE;
 	}
-	ret.Simplifaction();
+	ret.simplifaction();
 	return ret;
 }
 Radical_Exp Htto::Radical_Exp::operator*(Radical_Number op)const
@@ -248,7 +248,7 @@ Radical_Exp Htto::Radical_Exp::operator*(Radical_Number op)const
 }
 int Htto::Radical_Exp::GetMaxGCD()
 {
-	Simplifaction();
+	simplifaction();
 	int maxGcd = ExpVec[0].outNumber;
 	for (unsigned int i = 1;i < ExpVec.size();i++)
 	{
@@ -386,7 +386,7 @@ outNumber = -outNumber;
 		inNumber = 1;
 }
 //化简函数
-void Htto::Radical_Number::Simplifaction()
+void Htto::Radical_Number::simplifaction()
 {
 	int tempNumber = red(inNumber);
 	if (tempNumber == 0)
@@ -560,7 +560,7 @@ Htto::Radical_Number Htto::Radical_Number::operator*(const Radical_Number & op)c
 	int frontN = this->outNumber*op.outNumber;
 	int inN = this->inNumber*op.inNumber;
 	Radical_Number ret(frontN, inN);
-	ret.Simplifaction();//化简
+	ret.simplifaction();//化简
 	return ret;
 }
 Htto::Radical_Number Htto::Radical_Number::operator/(const Radical_Number & op)const
@@ -570,7 +570,7 @@ Htto::Radical_Number Htto::Radical_Number::operator/(const Radical_Number & op)c
 	int frontN = this->outNumber / op.outNumber;
 	int inN = this->inNumber / op.inNumber;
 	Radical_Number ret(frontN, inN);
-	ret.Simplifaction();//化简
+	ret.simplifaction();//化简
 	return ret;
 }
 Radical_Number Htto::Radical_Number::operator=(const int & num)
@@ -804,8 +804,8 @@ void Htto::Fraction::simplification()
 		m_molecular = m_molecular*m_denomilator;
 		m_denomilator = m_denomilator*m_denomilator;
 	}
-	m_molecular.Simplifaction();
-	m_denomilator.Simplifaction();
+	m_molecular.simplifaction();
+	m_denomilator.simplifaction();
 	int maxGCD = SimpleAlgorithm::INT_GCD(m_molecular.GetMaxGCD(), m_denomilator.GetMaxGCD());
 	m_molecular.reduceByNumber(maxGCD);
 	m_denomilator.reduceByNumber(maxGCD);

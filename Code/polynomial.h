@@ -19,6 +19,7 @@ namespace Htto
 		friend class Count::factorization;
 		friend Polynomial operator-(Polynomial  fra);
 		friend class Equation2;
+		friend class Rational_fraction;
 	public:
 		Polynomial() = default;
 		Polynomial(std::string str);

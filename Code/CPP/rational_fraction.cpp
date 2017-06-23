@@ -1,73 +1,5 @@
 #include "../rational_fraction.h"
 using namespace Htto;
-Htto::Rational_fraction::Rational_fraction(const std::string & str)
-{
-	std::string tempStr;
-	int state = 0;
-	bool state2 = 0;
-	int pos = 0;
-	for (const auto & a : str)
-	{
-		if (a == '/')
-		{
-			state2 = true;
-		}
-		if (a == '(')
-		{
-			state = 12;
-			continue;
-		}
-		else if (a == ')')
-		{ 
-			state = 13;
-		}
-		else if (state == 13 && a == '/')
-		{
-			pos = 1;
-			state = 12;
-			continue;
-		}
-		else if (state2&&state == 12)
-		{
-			m_molecular = Polynomial(tempStr);
-			tempStr == "";
-		}
-		switch (state)
-		{
-		case 0:
-			tempStr += a;
-			break;
-		case 12:
-			tempStr += a;
-			break;
-		case 13:
-			if (pos == 0)
-			{
-				m_molecular = Polynomial(tempStr);
-				tempStr = "";
-			}
-			else if (pos == 1)
-			{
-				m_denomilator = Polynomial(tempStr);
-				tempStr = "";
-			}
-			else
-				throw std::runtime_error("rational_fraction: bad input too many '/' .");
-			break;
-		default:
-			break;
-		}
-	}
-	if (state == 0)
-	{
-		m_molecular = Polynomial(tempStr);
-		m_denomilator = Polynomial("1");
-	}
-	else if (state == 12)
-	{
-		m_denomilator = Polynomial(tempStr);
-	}
-}
 
 std::string Htto::Rational_fraction::ToString()
 {
@@ -76,15 +8,94 @@ std::string Htto::Rational_fraction::ToString()
 	return "(" + m_molecular.ToString() + std::string(")/(") + m_denomilator.ToString() + ")";
 }
 
+Rational_fraction Htto::Rational_fraction::get_reciprocal() const
+{
+	Rational_fraction ret = *this;
+	std::swap(ret.m_denomilator, ret.m_molecular);
+	if (ret.m_denomilator = Polynomial("0"))
+		throw std::runtime_error("Ration_fraction::<public>get_reciprocal m_denomoilator is zero.");
+}
+
 Rational_fraction Htto::Rational_fraction::operator+(const Rational_fraction & r_fraction)const
 {
 	Polynomial den = m_denomilator*r_fraction.m_denomilator;
 	Rational_fraction ret;
 	ret.m_denomilator = den;
 	ret.m_molecular = (m_molecular*den) + (r_fraction.m_molecular*den);
+	ret.simplifaction();
+	return ret;
+}
+Rational_fraction Htto::Rational_fraction::operator-(const Rational_fraction &r_fraction) const
+{
+	Polynomial den = m_denomilator*r_fraction.m_denomilator;
+	Rational_fraction ret;
+	ret.m_denomilator = den;
+	ret.m_molecular = (m_molecular*den) - (r_fraction.m_molecular*den);
+	ret.simplifaction();
+}
+Rational_fraction Htto::Rational_fraction::operator*(const Rational_fraction & r_fraction) const
+{
+	Rational_fraction ret;
+	ret.m_denomilator = r_fraction.m_denomilator;
+	ret.m_molecular = r_fraction.m_molecular;
+	ret.simplifaction();
+	return ret;
+}
+Rational_fraction Htto::Rational_fraction::operator/(const Rational_fraction & r_fraction) const
+{
+	Rational_fraction ret = (*this)*r_fraction.get_reciprocal();
 	return ret;
 }
 #ifdef CONSOLE_DEBUG
+void Htto::Rational_fraction::simplifaction()
+{
+	std::vector<Polynomial> vec = Count::factorization::factoring(m_denomilator);
+	std::vector<Polynomial> vec2 = Count::factorization::factoring(m_molecular);
+	if (vec.size() == 1 && vec2.size() == 1)
+	{
+		m_molecular =m_molecular/m_denomilator;
+		m_molecular.get_rid_of_zero_monomial();
+		m_denomilator = Polynomial("1");
+		for (size_t i = 0;i < m_molecular.data.size();i++)
+		{
+			auto & a = m_molecular[i];
+			if (a.times() < Fraction(0))
+			{
+				m_denomilator.data.push_back(-a);
+				m_molecular.data.erase(m_molecular.data.begin() + i);
+				i--;
+			}
+		}
+		return;
+	}
+	else
+	{
+		for (size_t i=0;i<vec.size();i++)
+			for (size_t j = 0;j < vec2.size();j++)
+			{
+				if (vec[i] == vec2[j])
+				{
+					vec.erase(vec.begin() + i);
+					vec2.erase(vec2.begin() + j);
+					if (i != 0 && j != 0)
+					{
+						j--;i--;
+					}
+				}
+			}
+	}
+	m_denomilator = Polynomial("1");
+	m_molecular = Polynomial("1");
+	for (const auto &a: vec)
+	{
+		m_denomilator *= a;
+	}
+	for (const auto & a : vec2)
+	{
+		m_molecular *= a;
+	}
+
+}
 void Htto::Rational_fraction::debug()
 {
 	std::cout << "rational_fraction debug msg:\n";
@@ -92,3 +103,9 @@ void Htto::Rational_fraction::debug()
 	std::cout << m_denomilator.ToString() << std::endl;
 }
 #endif
+
+Rational_fraction Htto::operator-( Rational_fraction param)
+{
+	param.m_molecular = -param.m_molecular;
+	return param;
+}

@@ -3,6 +3,7 @@
 #include "../equation.h"
 #include <time.h>
 #include "../factorization.h"
+#include "../rational_fraction.h"
 #include "../Examples/polynomial_counter.h"
 #ifdef _WIN32
 #include <Windows.h>
@@ -20,7 +21,12 @@ int main()
 	start = clock();
 	try
 	{
-		Example::polyv_equation();
+		Rational_fraction rf(Polynomial("xy"), Polynomial("x^2+2"));
+		rf.simplifaction();
+		std::cout << rf.ToString();
+		//Rational_fraction rf(Polynomial("x^3+x^3+x^4"),Polynomial("x^2"));
+		//rf.simplifaction();
+		//std::cout << rf.ToString();
 	}
 	catch (std::exception & e)
 	{
@@ -33,6 +39,14 @@ int main()
 	}
 	catch (std::exception & e)
 	{
+		/*		Polynomial p1;
+		p1=Htto::Count::SimpleCount::PolyCount("(18111/2)x^4-90555x^3+(633885/2)x^2-452773x+217331");
+		std::map<std::string, Fraction> m;
+		for (int i = 1;i < 10;i++)
+		{
+			m["x"] = Fraction(i);
+			std::cout <<p1.get_value(m)<<std::endl;
+		}*/
 		std::cout << e.what();
 	}
 	finish = clock();
