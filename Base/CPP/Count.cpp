@@ -1,6 +1,9 @@
 #include "../Count.h"
 #include "../BalanceStack.h"
 #include <stdlib.h>
+#ifdef MWUWP
+#include "pch.h"
+#endif // MWUWP
 using namespace Htto::Count;
 void string_replace(std::string&s1, const std::string&s2, const std::string&s3)
 {
@@ -17,7 +20,7 @@ void string_replace(std::string&s1, const std::string&s2, const std::string&s3)
 float StringToFloat(std::string str)
 {
 	float i;
-	i = atof(str.c_str());
+	i = (float)atof(str.c_str());
 	return i;
 }
 unit Push_unit(int & index, std::string input)
@@ -70,6 +73,13 @@ unit Push_unit(int & index, std::string input)
 	index++;
 	return ret;
 }
+Htto::Rational_fraction Htto::Count::SimpleCount::Rational_fraction_count(const std::string & str)
+{
+	UniversalCount<Rational_fraction> up;
+	std::string str2 = StringTools::convert_expression(str);
+	up.InfixToPostfix(PushToListR(str2));
+	return up.Count();
+}
 Htto::Polynomial Htto::Count::SimpleCount::PolyCount(const std::string & str)
 {
 	UniversalCount<Polynomial> up;
@@ -84,6 +94,58 @@ bool Htto::Count::SimpleCount::IsCountSign(char c)
 	else
 		return false;
 }
+Htto::Count::ExpressionList<Htto::Rational_fraction> Htto::Count::SimpleCount::PushToListR(const std::string & str)
+{
+	int state = 0;
+	int old_state = 0;
+	char lastChar;
+	ExpressionList<Htto::Rational_fraction> ret;
+	Polynomial poly_temp;
+	std::string str_temp;
+	for (int i = 0;i<str.size();i++)
+	{
+		old_state = state;
+		if (IsCountSign(str[i]))
+		{
+			state = 2;
+		}
+		else
+			state = 0;
+		switch (state)
+		{
+		case 0:
+			str_temp += str[i];
+			break;
+		case 2:
+			if ((str[i] == '+' || str[i] == '-') && (i == 0 || str[i - 1] == '('))
+			{
+				str_temp += str[i];
+				break;
+			}
+			else if (str[i] == '^'&&old_state == 0)
+			{
+				str_temp += str[i];
+				break;
+			}
+			if (str_temp == "")
+			{
+				ret.push_back(Element<Rational_fraction>(std::string(1, str[i]), false, get_priority(str[i])));
+				//pos++;
+				continue;
+			}
+			ret.push_back(Element<Rational_fraction>(str_temp, true));
+			str_temp = "";
+			ret.push_back(Element<Rational_fraction>(std::string(1, str[i]), false, get_priority(str[i])));
+			break;
+		default:
+			break;
+		}
+	}
+	if (str_temp != "")
+		ret.push_back(Element<Rational_fraction>(str_temp, true));
+	return ret;
+}
+
 Htto::Count::ExpressionList<Htto::Polynomial> Htto::Count::SimpleCount::PushToListP(const std::string & str)
 {
 	int state = 0;

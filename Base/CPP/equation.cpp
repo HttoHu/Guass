@@ -1,6 +1,11 @@
 #include "../equation.h"
+#ifdef MWUWP
+#include "pch.h"
+#endif // MWUWP
 using namespace Htto::Count;
 using namespace Htto;
+//快速查找,EX00+ Equation后面的序号即可跳转到此类的方法定义.
+//===========================EX001 ====================================
 std::vector<Fraction> Htto::Count::Equation::solve(const std::string & str)
 {
 	Polynomial poly_temp = get_polynomial(str);
@@ -62,8 +67,7 @@ Htto::Polynomial Htto::Count::Equation::merage(const std::string & left, const s
 	Polynomial poly_right = temp.Count();
 	return (poly_left - poly_right);
 }
-
-
+//===========================EX002 ====================================
 std::map<std::string, Fraction> Htto::Count::Equation2::solve(const std::vector<std::string>& vec)
 {
 	bool can_be_solved = true;;
@@ -106,7 +110,6 @@ std::map<std::string, Fraction> Htto::Count::Equation2::solve(const std::vector<
 	}
 	return result;
 }
-
 Polynomial Htto::Count::Equation2::convert_single_to_polynomial(const std::string & vname, const Polynomial & poly)
 {
 	Polynomial ret = poly;
@@ -117,7 +120,6 @@ Polynomial Htto::Count::Equation2::convert_single_to_polynomial(const std::strin
 	ret.simplification();
 	return ret;
 }
-
 Fraction Htto::Count::Equation2::solve_driver(std::string v, const std::map<std::string, Polynomial> &table)
 {
 	if (table.find(v) == table.end())
@@ -132,4 +134,48 @@ Fraction Htto::Count::Equation2::solve_driver(std::string v, const std::map<std:
 		valueTable.insert({ a,solve_driver(a,table) });
 	}
 	return it->second.get_value(valueTable);
+}
+//===========================EX003 ====================================
+std::vector<Fraction> Htto::Count::Equation3::solve(const std::string & str)
+{
+	Rational_fraction tp_rational_fraction = get_rational_fraction(str);
+	tp_rational_fraction.simplification();
+	if (tp_rational_fraction.denmonilator() == Rational_fraction("1"))
+		return Equation::solve(tp_rational_fraction.molecular().ToString());
+	else if(tp_rational_fraction.denmonilator() == Rational_fraction("-1"))
+		return Equation::solve((-tp_rational_fraction).molecular().ToString());
+	std::set<Fraction> false_root;
+	std::vector<Fraction> vec_froot = Equation::solve(tp_rational_fraction.denmonilator().ToString());
+	for (const auto & a : vec_froot)
+		false_root.insert(a);
+	std::vector<Fraction> roots= Equation::solve(tp_rational_fraction.molecular().ToString());
+	std::vector<Fraction>ret;
+	for (const auto & a : roots)
+	{
+		if (false_root.find(a) == false_root.end())
+		{
+			ret.push_back(a);
+		}
+	}
+	return ret;
+}
+Rational_fraction Htto::Count::Equation3::get_rational_fraction(const std::string & str)
+{
+	if (str.find('=') == std::string::npos)
+	{
+		throw std::runtime_error("Equation::<public>get_polynomial: '=' disappeared.");
+	}
+	size_t index = str.find('=');
+	std::string left = str.substr(0, index);
+	std::string right = str.substr(index + 1, str.size() - index - 1);
+	return merage(left, right);
+}
+Rational_fraction Htto::Count::Equation3::merage(const std::string & left, const std::string & right)
+{
+	UniversalCount<Rational_fraction>temp;
+	temp.InfixToPostfix(Htto::Count::SimpleCount::PushToListR(StringTools::convert_expression(left)));
+	Rational_fraction poly_left = temp.Count();
+	temp.InfixToPostfix(Htto::Count::SimpleCount::PushToListR(StringTools::convert_expression(right)));
+	Rational_fraction poly_right = temp.Count();
+	return (poly_left - poly_right);
 }

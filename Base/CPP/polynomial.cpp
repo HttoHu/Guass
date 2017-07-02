@@ -1,4 +1,7 @@
 #include "../polynomial.h"
+#ifdef MWUWP
+#include "pch.h"
+#endif // MWUWP
 using namespace Htto;
 Htto::Polynomial::Polynomial(std::string str)
 {
@@ -77,7 +80,7 @@ Polynomial Htto::Polynomial::reciprocal() const
 
 std::string Htto::Polynomial::ToString()const
 {
-	if (data.size() == 0)
+	if (data.empty())
 		return "0";
 	else if (data.size() == 1 && data.front().get_coef() == Fraction(0))
 		return "0";

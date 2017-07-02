@@ -1,4 +1,8 @@
 #include "../BalanceStack.h"
+#ifdef MWUWP
+#include "pch.h"
+#endif // MWUWP
+
 int getCharValue(char ch)
 {
 	if (ch == '(')

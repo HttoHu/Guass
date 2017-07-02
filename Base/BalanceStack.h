@@ -9,7 +9,7 @@ namespace Htto
 	private:
 		std::string data;
 		std::stack<char> container;
-		int deep;
+		size_t deep;
 	public:
 		BalanceStack(const std::string & parameter) :data(parameter), deep(0)
 		{

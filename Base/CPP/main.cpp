@@ -21,12 +21,9 @@ int main()
 	start = clock();
 	try
 	{
-		Rational_fraction rf(Polynomial("xy"), Polynomial("x^2+2"));
-		rf.simplifaction();
-		std::cout << rf.ToString();
-		//Rational_fraction rf(Polynomial("x^3+x^3+x^4"),Polynomial("x^2"));
-		//rf.simplifaction();
-		//std::cout << rf.ToString();
+		std::string input;
+		std::cin >> input;
+		std::cout << Count::SimpleCount::Rational_fraction_count(input).ToString();
 	}
 	catch (std::exception & e)
 	{

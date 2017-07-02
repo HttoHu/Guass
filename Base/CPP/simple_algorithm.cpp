@@ -2,6 +2,9 @@
 #include "../simple_algorithm.h"
 #include <iostream>
 #include <cctype>
+#ifdef MWUWP
+#include "pch.h"
+#endif // MWUWP
 //获得最大公因数
 using namespace Htto;
 int Htto::SimpleAlgorithm::INT_GCD(int n, int m)
@@ -28,7 +31,6 @@ int Htto::SimpleAlgorithm::INT_MAX_FACTOR(int n)
 {
 	if (n < 1)
 		return 1;
-
 	for (int i = n - 1;i > 0;i--)
 	{
 		if (!(n%i))

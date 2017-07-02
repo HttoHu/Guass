@@ -21,7 +21,7 @@ namespace Htto
 		Radical_Number() { Radical_Number(1, 1); };
 
 		Radical_Number(int num) { Radical_Number(num, 1); };
-		void simplifaction();//化简
+		void simplification();//化简
 		float get_numsqrt()const;
 		void numsqrt();//开方
 		std::string ToString()const;//输出string
@@ -62,7 +62,7 @@ namespace Htto
 		std::string ToString()const;
 		float get_numsqrt()const;
 		void reset(std::string str);
-		void simplifaction();
+		void simplification();
 		void reduceByNumber(int num);
 		bool isSingle();
 		bool isNature();

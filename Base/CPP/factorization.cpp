@@ -1,10 +1,28 @@
 #include "../factorization.h"
+#ifdef MWUWP
+#include "pch.h"
+#endif // MWUWP
 using namespace Htto;
 std::vector<Polynomial> Htto::Count::factorization::factoring(Polynomial poly)
 {
 	std::vector<Polynomial> ret;
 	poly.simplification();
 	Monomial m_factor = poly.data.at(0);//cheak index.
+	/*if (poly.term_count() == 1)
+	{
+		for (auto & a : poly.data)
+		{
+			for (auto & b : a.variableTable)
+			{
+				int times = a.times();
+				for (size_t t = times;t > 0;t--)
+				{
+					ret.push_back(Polynomial(b.first));
+					b.second = b.second-Fraction("1");
+				}
+			}
+		}
+	}*/
 	for (const auto & a : poly.data)
 	{
 		m_factor = get_public_factor(m_factor, a);

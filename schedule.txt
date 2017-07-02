@@ -1,3 +1,55 @@
 ﻿6-15计划
 ->多项式乘-1会崩溃,修复这个bug ✔
 ->写完简单的方程模块 ⏱
+6-24
+void Htto::Rational_fraction::simplification()
+{
+	std::vector<Polynomial> vec = Count::factorization::factoring(m_denomilator);
+	std::vector<Polynomial> vec2 = Count::factorization::factoring(m_molecular);
+	if (vec[0].variable_count()== 1 && vec2[0].variable_count() == 1)
+	{
+		m_molecular =m_molecular/m_denomilator;
+		m_molecular.get_rid_of_zero_monomial();
+		m_denomilator = Polynomial("1");
+		for (size_t i = 0;i < m_molecular.data.size();i++)
+		{
+			auto & a = m_molecular[i];
+			if (a.times() < Fraction(0))
+			{
+				m_denomilator.data.push_back(-a);
+				m_molecular.data.erase(m_molecular.data.begin() + i);
+				i--;
+			}
+		}
+		return;
+	}
+	else
+	{
+		for (size_t i=0;i<vec.size();i++)
+			for (size_t j = 0;j < vec2.size();j++)
+			{
+				if (vec[i] == vec2[j])
+				{
+					vec.erase(vec.begin() + i);
+					vec2.erase(vec2.begin() + j);
+					if (i != 0 && j != 0)
+					{
+						j--;i--;
+					}
+				}
+			}
+	}
+	m_denomilator = Polynomial("1");
+	m_molecular = Polynomial("1");
+	for (const auto &a: vec)
+	{
+		m_denomilator *= a;
+	}
+	for (const auto & a : vec2)
+	{
+		m_molecular *= a;
+	}
+	m_denomilator.simplification();
+	m_molecular.simplification();
+}
+对上面垃圾代码简化掉.

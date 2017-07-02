@@ -1,4 +1,7 @@
 ﻿#include"../monomial.h"
+#ifdef MWUWP
+#include "pch.h"
+#endif // MWUWP
 using std::string;
 using namespace Htto;
 string UseAndClearString(std::string & str)
@@ -150,6 +153,7 @@ Monomial Htto::Monomial::operator/(const Monomial & M) const
 			ret.variableTable.insert({ it->first,-(it->second) });
 		}
 	}
+	ret.simplifiction();
 	return ret;
 }
 

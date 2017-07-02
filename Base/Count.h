@@ -1,5 +1,6 @@
 #pragma once
 #include "polynomial.h"
+#include "rational_fraction.h"
 #include <stack>
 #include <list>
 
@@ -76,8 +77,10 @@ namespace Htto
 		class SimpleCount
 		{
 		public:
+			static Rational_fraction Rational_fraction_count(const std::string& str);
 			static Polynomial PolyCount(const std::string& str);
 			static bool IsCountSign(char c);
+			static Count::ExpressionList<Htto::Rational_fraction>PushToListR(const std::string & str);
 			static Count::ExpressionList<Htto::Polynomial>PushToListP(const std::string & str);
 			static std::list<unit> PushToListF(std::string input);
 			static std::list<unit> InfixToPostfix(std::list<unit> & ExpStream);
